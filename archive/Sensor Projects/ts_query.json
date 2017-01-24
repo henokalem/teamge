@@ -1,0 +1,14 @@
+{
+    "start": 1466941298700,
+    "end": 1469951208724,
+    "tags": [
+       {
+            "name": ["PETT-2016:Temperature"],
+            "limit": 1
+        },
+        {
+            "name": ["PETT-2016:Humidity"],
+            "limit": 1
+        }
+    ]
+}

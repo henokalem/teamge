@@ -1,0 +1,35 @@
+{
+  "messageId": "PETTMIKE2016",
+  "body": [
+    {
+      "name": "PETT-2016:Temperature",
+      "datapoints": [
+        [
+          1467952776230,
+          109,
+          3
+        ]
+      ],
+      "attributes": [
+        {
+          "assetId": "compressor-2015"
+        }
+      ]
+    },
+    {
+      "name": "PETT-2016:Humidity",
+      "datapoints": [
+        [
+          1467952776230,
+          109,
+          3
+        ]
+      ],
+      "attributes": [
+        {
+          "assetId": "compressor-2015"
+        }
+      ]
+    }
+  ]
+}
