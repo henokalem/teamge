@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="/xml/XSLT/roster2array.xsl" type="text/xsl"?>
+<roster-config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://jmri.org/xml/schema/roster.xsd">
+  <!--Written by JMRI version 4.6-R81496dc on Fri Feb 17 15:51:08 UTC 2017 $Id$-->
+  <roster>
+    <locomotive id="Yellow4Function1" fileName="4FunctionTrainNewDCC.xml" roadNumber="" roadName="" mfg="" owner="pi" model="" dccAddress="3" comment="" maxSpeed="100" imageFilePath="" iconFilePath="" URL="" IsShuntingOn="">
+      <dateUpdated>Feb 14, 2017 5:00:06 PM</dateUpdated>
+      <decoder model="4 function decoder (36-550)" family="E-Z Command decoders" comment="" />
+      <locoaddress>
+        <dcclocoaddress number="3" longaddress="no" />
+        <number>3</number>
+        <protocol>dcc_short</protocol>
+      </locoaddress>
+    </locomotive>
+    <locomotive id="Yellow4Function2" fileName="Yellow4Function2.xml" roadNumber="" roadName="" mfg="" owner="pi" model="" dccAddress="1" comment="" maxSpeed="100" imageFilePath="" iconFilePath="" URL="" IsShuntingOn="">
+      <dateUpdated>Feb 14, 2017 5:34:05 PM</dateUpdated>
+      <decoder model="4 function decoder (36-550)" family="E-Z Command decoders" comment="" />
+      <locoaddress>
+        <dcclocoaddress number="1" longaddress="no" />
+        <number>1</number>
+        <protocol>dcc_short</protocol>
+      </locoaddress>
+    </locomotive>
+  </roster>
+</roster-config>

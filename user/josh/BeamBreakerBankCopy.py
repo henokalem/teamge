@@ -10,7 +10,7 @@ class BeamBreaker:
             self.beam_breaker_bank.activated(channel, self.pin_id, self.left_block, self.right_block)
         else:
             #Time was too short, was same train
-            print("The same train activated the beam break!")
+            print("The same train activated the beam break! ID: ", self.pin_id)
         self.time_of_last_break = datetime.datetime.utcnow()
 
     #Constructor
@@ -39,36 +39,45 @@ class BeamBreakerBank:
     	# Set up beam breakers, change if you change the ports for
     	#  the beam breakers or add more (need to fix blocks).
     	#  Blocks determined by counter-clockwise orientation.
-    	self.beam_breaker.append(BeamBreaker(3,2,1,self))
-    	self.beam_breaker.append(BeamBreaker(2,1,2,self))
+    	self.beam_breaker.append(BeamBreaker(21,2,1,self))
+    	self.beam_breaker.append(BeamBreaker(20,1,2,self))
+    	self.beam_breaker.append(BeamBreaker(16,1,2,self))
+        self.beam_breaker.append(BeamBreaker(12,1,2,self))
+    	self.beam_breaker.append(BeamBreaker(26,1,2,self))
+    	self.beam_breaker.append(BeamBreaker(19,1,2,self))
+    	self.beam_breaker.append(BeamBreaker(13,1,2,self))
+    	self.beam_breaker.append(BeamBreaker(6,1,2,self))
+    	self.beam_breaker.append(BeamBreaker(5,1,2,self))
+
+
 
     	# Set up the trains
-    	self.trains.append(Train(1, 1))
+##    	self.trains.append(Train(1, 1))
 
     def activated(self, channel, pin_id, left_block, right_block):
     	print("Activated: " + str(pin_id))
 
-    	# Logic for sensor activation
-    	potential_trains = []
-    	for train in self.trains:
-            if (train.current_block == left_block) or (train.current_block == right_block):
-                potential_trains.append(train)
-        if len(potential_trains) == 0:
-            print("No train could have set this off!")
-        elif len(potential_trains) == 1:
-            # Peform operation here to move blocks
-            train = potential_trains[0]
-            if (train.current_block == left_block):
-                #This means it is moving from left to right block
-                train.current_block = right_block
-                #Set direction here?
-                print(train)
-            else:
-                # current block must equal right block, so moving into left block
-                train.current_block = left_block
-                print(train)
-        elif len(potential_trains) >= 2:
-            print("Too many trains could have set this off, cannot determine source.")
+##    	# Logic for sensor activation
+##    	potential_trains = []
+##    	for train in self.trains:
+##            if (train.current_block == left_block) or (train.current_block == right_block):
+##                potential_trains.append(train)
+##        if len(potential_trains) == 0:
+##            print("No train could have set this off!")
+##        elif len(potential_trains) == 1:
+##            # Peform operation here to move blocks
+##            train = potential_trains[0]
+##            if (train.current_block == left_block):
+##                #This means it is moving from left to right block
+##                train.current_block = right_block
+##                #Set direction here?
+##                print(train)
+##            else:
+##                # current block must equal right block, so moving into left block
+##                train.current_block = left_block
+##                print(train)
+##        elif len(potential_trains) >= 2:
+##            print("Too many trains could have set this off, cannot determine source.")
 
 # Class for the trains
 class Train:
@@ -83,6 +92,7 @@ class Train:
         return "Train " + str(self.name) + ", current block: " + str(self.current_block)
 
 BeamBreakerBank()
+print("started")
 while True:
     #print("Waiting")
     time.sleep(0.1)
