@@ -5,6 +5,7 @@ import RPi.GPIO as GPIO, time
 import datetime
 import os
 import csv
+import sys
 
 
 #Class for beam breakers
@@ -39,12 +40,14 @@ class BeamBreaker:
 # Class for holding all of the beam breakers
 class TrainLayout:
     # Constructor
-    def __init__(self):
+    def __init__(self,train1_start_segment,train2_start_segment):
         #Constants
         self.TRAIN_CHECK_DIST = 6
         self.LAG_TIME = 1
         self.COLLISION_TIME_BUFFER = 5
-        self.TRAIN_DISTANCE_BUFFER = 10
+        self.TRAIN_DISTANCE_BUFFER = 15
+        self.TURNOUT_COLLISION_TIME_BUFFER = 1.5
+        self.FIX_TIME_BUFFER = 0.1
 
         self.breaker_8_offset = 0
         self.state = 0
@@ -58,7 +61,22 @@ class TrainLayout:
         self.fix_time_remaining = 0
         self.time_of_last_check = datetime.datetime.utcnow()
 
+
         # Initialize turnouts, blocks, trains, and breakers here
+
+        #print("Train 1 starting segment: " + str(train1_start_segment))
+        #print("Train 2 starting segment: " + str(train2_start_segment))
+        if(train1_start_segment != 0):
+            self.trains.append(Train(1,train1_start_segment))
+        if(train2_start_segment != 0):
+            self.trains.append(Train(3,train2_start_segment))
+        #print(len(self.trains))
+        if(len(self.trains) == 0):
+            print("There are no trains to keep track of!")
+            sys.exit()
+
+
+        
         self.turnouts.append(Turnout(1,20,21, "counter-clockwise"))
         time.sleep(1)
         self.turnouts.append(Turnout(2,5,7, "clockwise"))
@@ -80,8 +98,8 @@ class TrainLayout:
         self.blocks.append(Block(5,23.125,self.blocks[4-1],None,None,None,None,None))
         self.blocks.append(Block(6,22.4375,self.blocks[5-1],None,None,None,None,None))
         self.blocks.append(Block(7,4.625,self.blocks[6-1],None,self.turnouts[4-1],self.blocks[1-1],None,None))
-        self.blocks.append(Block(8,38.875 + self.breaker_8_offset,self.blocks[1-1],None,None,None,None,None)) #1 inches longer
-        self.blocks.append(Block(9,5.125 - self.breaker_8_offset,self.blocks[8-1],None,None,None,None,None))  #1 inches shorter
+        self.blocks.append(Block(8,38.875 + self.breaker_8_offset,self.blocks[1-1],None,None,None,None,None))
+        self.blocks.append(Block(9,5.125 - self.breaker_8_offset,self.blocks[8-1],None,None,None,None,None))
         self.blocks.append(Block(10,10.5625,self.blocks[9-1],None,self.turnouts[3-1],None,None,None))
         self.blocks.append(Block(11,7.375,self.blocks[10-1],None,None,None,None,None))
         self.blocks.append(Block(12,5.5,None,self.blocks[11-1],self.turnouts[2-1],None,None,None))
@@ -105,28 +123,39 @@ class TrainLayout:
 ##        for block in self.blocks:
 ##            print(block)
 
+        #Now that all blocks are defined, set up the turnout blocks
+        self.turnouts[1-1].setBlock(self.blocks[3-1],self.blocks[3-1].distance)
+        self.turnouts[2-1].setBlock(self.blocks[12-1],0)
+        self.turnouts[3-1].setBlock(self.blocks[10-1],0)
+        self.turnouts[4-1].setBlock(self.blocks[7-1],0)
+        self.turnouts[5-1].setBlock(self.blocks[1-1],self.blocks[1-1].distance)
+
         # Set up the pairs
         # Pair are defined in a counter-clockwise order!!
-        self.pairs.append(Pair(2,8,51.75+self.breaker_8_offset))  #1 inches longer
+        self.pairs.append(Pair(2,8,51.75+self.breaker_8_offset))
         self.pairs.append(Pair(2,9,51.8125))
         self.pairs.append(Pair(1,2,22.4375))
         self.pairs.append(Pair(9,5,33.8125))
         self.pairs.append(Pair(5,1,15.625))
         self.pairs.append(Pair(4,1,12.875))
         #self.pairs.append(Pair(4,7,D))
-        self.pairs.append(Pair(8,4,15.6875-self.breaker_8_offset))  #1 inches shorter
+        self.pairs.append(Pair(8,4,15.6875-self.breaker_8_offset))
         self.pairs.append(Pair(9,6,33.8125))
         self.pairs.append(Pair(6,3,23.125))
         self.pairs.append(Pair(3,2,27.0625))
         # Other pairs for if a beam breaker fails
-        self.pairs.append(Pair(8,1,28.5625-self.breaker_8_offset))  #1 inches shorter
+        self.pairs.append(Pair(8,1,28.5625-self.breaker_8_offset))
         self.pairs.append(Pair(2,4,67.4375))
         self.pairs.append(Pair(6,2,50.1875))
-        self.pairs.append(Pair(1,8,74.1875+self.breaker_8_offset))  #1 inches longer
-        self.pairs.append(Pair(3,8,78.8125+self.breaker_8_offset))  #1 inches longer
+        self.pairs.append(Pair(1,8,74.1875+self.breaker_8_offset))
+        self.pairs.append(Pair(3,8,78.8125+self.breaker_8_offset))
         self.pairs.append(Pair(1,9,74.25))
         self.pairs.append(Pair(3,9,78.875))
-        self.pairs.append(Pair(8,2,51-self.breaker_8_offset))       #1 inches shorter
+        self.pairs.append(Pair(8,2,51-self.breaker_8_offset))
+        self.pairs.append(Pair(2,5,85.625))
+        self.pairs.append(Pair(5,2,38.0625))
+        self.pairs.append(Pair(4,8,87.0625+self.breaker_8_offset))
+        self.pairs.append(Pair(4,2,35.3125))
 
         #Initialize beam breakers
         self.beam_breakers.append(BeamBreaker(1,6,4,self.blocks[13-1],self))
@@ -145,10 +174,7 @@ class TrainLayout:
         self.turnouts[5-1].activateTurn()
 ##        self.turnouts[4-1].activateTurn()
 ##        self.turnouts[2-1].activateTurn()
-
-
-        self.trains.append(Train(1,6))
-        self.trains.append(Train(3,1))
+            
 
         # Get the initial SPROG speed setting from the file
         print "reading from file"
@@ -187,7 +213,7 @@ class TrainLayout:
         for train in self.trains:
             if(train.initialized):
                 train.updateTrain(datetime.datetime.utcnow())
-                print("Train : " + str(train.train_id) + " Block: " + str(train.current_block.block_id) + " Location: " + str(train.distance_in_block) + " Speed: " + str(train.speed))
+                print("Train : " + str(train.train_id) + " Block: " + str(train.current_block.block_id) + " Location: " + str(train.distance_in_block) + " Speed: " + str(train.speed) + " Sprog Speed: " + str(train.sprog_speed))
         if len(self.trains) > 1:
             #Update fix time remaining
             elapsed_since_check = (datetime.datetime.utcnow()-self.time_of_last_check).total_seconds()
@@ -333,30 +359,16 @@ class TrainLayout:
                 time_to_collision = otherTrainDist/(otherTrain.speed - checkTrain.speed)
                 if(time_to_collision < self.COLLISION_TIME_BUFFER or otherTrainDist <  self.TRAIN_DISTANCE_BUFFER):
                     #Slow down back train (other train) or speed up front train (check train)
-                    print("CHANGING THE SPEED OF A TRAIN! ----1-1-----------------44-------------2-----------------------51325----------------------")
+                    print("Case: train is catching up and cannot swtich turnout in time")
                     if(otherTrain.sprog_speed > 0.5):
-                        #INSERT SLOW DOWN CODE HERE and fix times
-                        new_speed = otherTrain.sprog_speed - 0.2
-                        os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(otherTrain.train_id) + " " + str(new_speed))
-                        print("Changing the speed of " + str(otherTrain.train_id) + " to " + str(new_speed) + ", slowing down")
-                        otherTrain.updateTrain(datetime.datetime.utcnow())
-                        otherTrain.setNewSPROGSpeed(new_speed)
-                        self.fix_time_remaining = 2
-                        self.time_of_last_check = datetime.datetime.utcnow()
+                        self.changeTrainSpeed(otherTrain,-0.2)
                         return
                     elif(checkTrain.sprog_speed < 0.9):
-                        #INSERT SPEED UP CODE HERE and fix times
-                        new_speed = checkTrain.sprog_speed + 0.2
-                        os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(checkTrain.train_id) + " " + str(new_speed))
-                        print("Changing the speed of " + str(checkTrain.train_id) + " to " + str(new_speed) + ", speeding up")
-                        checkTrain.updateTrain(datetime.datetime.utcnow())
-                        checkTrain.setNewSPROGSpeed(new_speed)
-                        self.fix_time_remaining = 2
-                        self.time_of_last_check = datetime.datetime.utcnow()
+                        self.changeTrainSpeed(checkTrain,0.2)
                         return
                     
 
-        if(trainInFront == True):
+        elif(trainInFront == True):
             #Check to see if this train is faster, if not do nothing, no collision imminent
             if(otherTrain.speed < checkTrain.speed):
                 #This train faster, will eventually catch up.
@@ -382,27 +394,167 @@ class TrainLayout:
                 time_to_collision = otherTrainDist/(checkTrain.speed - otherTrain.speed)
                 if(time_to_collision < self.COLLISION_TIME_BUFFER or otherTrainDist < self.TRAIN_DISTANCE_BUFFER):
                     #Slow down back train (other train) or speed up front train (check train)
-                    print("CHANGING THE SPEED OF A TRAIN! ----1-1-----------------44-----------472857-------------------51325----------------------")
+                    print("Case: train is catching up and cannot swtich turnout in time")
                     if(checkTrain.sprog_speed > 0.5):
-                        #INSERT SLOW DOWN CODE HERE and fix times
-                        new_speed = checkTrain.sprog_speed - 0.2
-                        os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(checkTrain.train_id) + " " + str(new_speed))
-                        print("Changing the speed of " + str(checkTrain.train_id) + " to " + str(new_speed) + ", slowing down")
-                        checkTrain.updateTrain(datetime.datetime.utcnow())
-                        checkTrain.setNewSPROGSpeed(new_speed)
-                        self.fix_time_remaining = 2
-                        self.time_of_last_check = datetime.datetime.utcnow()
+                        self.changeTrainSpeed(checkTrain,-0.2)
                         return
                     elif(otherTrain.sprog_speed < 0.9):
-                        #INSERT SPEED UP CODE HERE and fix times
-                        new_speed = otherTrain.sprog_speed + 0.2
-                        os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(otherTrain.train_id) + " " + str(new_speed))
-                        print("Changing the speed of " + str(otherTrain.train_id) + " to " + str(new_speed) + ", speeding up")
-                        otherTrain.updateTrain(datetime.datetime.utcnow())
-                        otherTrain.setNewSPROGSpeed(new_speed)
-                        self.fix_time_remaining = 2
-                        self.time_of_last_check = datetime.datetime.utcnow()
+                        self.changeTrainSpeed(otherTrain,0.2)
                         return
+
+
+
+        #traverse turnouts that are in opposite directions
+        else:
+            for distTuple in frontArray:
+                if(isinstance(distTuple[0], Turnout) and distTuple[0].orientation != checkTrain.direction):
+                    print("Checking for possible turnout collision")
+                    turnout = distTuple[0]
+                    ArrayStraight = []
+                    ArrayTurn = []
+                    if turnout.orientation == "clockwise":
+                        checkDistance = 40
+                        currentDistance = 0
+                        ArrayStraight = self.processBlockForTrainCW(turnout.block.left_block_straight, checkDistance, currentDistance)
+                        ArrayTurn = self.processBlockForTrainCW(turnout.block.left_block_turn, checkDistance, currentDistance)
+
+                    elif turnout.orientation == "counter-clockwise":
+                        checkDistance = 40
+                        currentDistance = 0
+                        ArrayStraight = self.processBlockForTrainCCW(turnout.block.right_block_straight, checkDistance, currentDistance)
+                        ArrayTurn = self.processBlockForTrainCCW(turnout.block.right_block_turn, checkDistance, currentDistance)
+
+                    if len(ArrayStraight) == 1 and len(ArrayTurn) == 1 and ArrayStraight[0][0].train_id != ArrayTurn[0][0].train_id:
+                        train1 = ArrayStraight[0][0]
+                        train2 = ArrayTurn[0][0]
+
+                        train1Dist = ArrayStraight[0][1]
+                        train2Dist = ArrayTurn[0][1]
+
+                        train1TimeToTurnout = train1Dist / abs(train1.speed)
+                        train2TimeToTurnout = train2Dist / abs(train2.speed)
+
+                        if abs(train1TimeToTurnout - train2TimeToTurnout) <= self.TURNOUT_COLLISION_TIME_BUFFER:
+                            #check distance of trains, either slow down train that will reach second or speed up train that will reach first
+                            print("Case: Train collision possible at a turnout")
+                            if(train1TimeToTurnout > train2TimeToTurnout):
+                                #Train 1 will reach second, so try to slow train down
+                                if(train1.sprog_speed > 0.5):
+                                    #Slow down train1, by calculating appropriate change in sprog speed to prevent collision,
+                                    # go down by 0.2 to prevent trains from having same sprog speed, keeps things interesting
+
+                                    # Want to change speed so that train1TimeToTurnout - train2TimeToTurnout > self.TURNOUT_COLLISION_TIME_BUFFER
+                                    print("-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------")
+                                    print("Train 1 slowing down?")
+                                    speed_steps = train1.getSpeedStepsArray()
+                                    print("Speed steps: " + str(speed_steps))
+                                    curr_test_sprog_speed = train1.sprog_speed
+                                    print("Current train sprog speed: " + str(curr_test_sprog_speed))
+                                    speed_change_good = False
+                                    new_speed_max = train1Dist / (self.TURNOUT_COLLISION_TIME_BUFFER + train2TimeToTurnout)
+                                    print("New max speed we need: " + str(new_speed_max))
+                                    while(curr_test_sprog_speed > 0.5 and speed_change_good == False):
+                                        curr_test_sprog_speed -= 0.2
+                                        print("Current testing sprog speed: " + str(curr_test_sprog_speed))
+                                        new_approx_speed = speed_steps[int(curr_test_sprog_speed*10)]
+                                        print("New approximate speed: " + str(new_approx_speed))
+                                        if(new_approx_speed < new_speed_max):
+                                            speed_change_good = True
+                                    change_in_sprog_speed = curr_test_sprog_speed - train1.sprog_speed
+                                    print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
+                                    print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
+                                    
+                                    self.changeTrainSpeed(train1,change_in_sprog_speed)
+                                    return # Stop looking for collisions, fix is in place
+                                elif(train2.sprog_speed < 0.9):
+                                    #Speed up train2
+
+                                    print("-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------")
+                                    print("Train 2 speeding up?")
+                                    speed_steps = train2.getSpeedStepsArray()
+                                    print("Speed steps: " + str(speed_steps))
+                                    curr_test_sprog_speed = train2.sprog_speed
+                                    print("Current train sprog speed: " + str(curr_test_sprog_speed))
+                                    speed_change_good = False
+                                    new_speed_min = train2Dist / (train1TimeToTurnout - self.TURNOUT_COLLISION_TIME_BUFFER)
+                                    while(curr_test_sprog_speed < 0.9 and speed_change_good == False):
+                                        curr_test_sprog_speed += 0.2
+                                        print("Current testing sprog speed: " + str(curr_test_sprog_speed))
+                                        new_approx_speed = speed_steps[int(curr_test_sprog_speed*10)]
+                                        print("New approximate speed: " + str(new_approx_speed))
+                                        if(new_approx_speed > new_speed_min):
+                                            speed_change_good = True
+                                    change_in_sprog_speed = curr_test_sprog_speed - train2.sprog_speed
+                                    print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
+                                    print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
+                                    
+                                    self.changeTrainSpeed(train2,0.2)
+                                    return # Stop looking for collisions, fix is in place
+                                else:
+                                    #This option means that train 1 cannot slow down, and train 2 cannot speed up
+                                    # FIGURE OUT WHAT TO DO HERE
+                                    print("CASE 3 FIX ME!")
+                                    return # Stop looking for collisions, fix is in place
+                            elif(train2TimeToTurnout > train1TimeToTurnout):
+                                #Train 2 will reach the turnout second, so first try to slow that down.
+                                if(train2.sprog_speed > 0.5):
+                                    #Slow down train 2
+
+                                    # Want to change speed so that train1TimeToTurnout - train2TimeToTurnout > self.TURNOUT_COLLISION_TIME_BUFFER
+                                    print("-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------")
+                                    print("Train 2 slowing down?")
+                                    speed_steps = train2.getSpeedStepsArray()
+                                    print("Speed steps: " + str(speed_steps))
+                                    curr_test_sprog_speed = train2.sprog_speed
+                                    print("Current train sprog speed: " + str(curr_test_sprog_speed))
+                                    speed_change_good = False
+                                    new_speed_max = train2Dist / (self.TURNOUT_COLLISION_TIME_BUFFER + train1TimeToTurnout)
+                                    print("New max speed we need: " + str(new_speed_max))
+                                    while(curr_test_sprog_speed > 0.5 and speed_change_good == False):
+                                        curr_test_sprog_speed -= 0.2
+                                        print("Current testing sprog speed: " + str(curr_test_sprog_speed))
+                                        new_approx_speed = speed_steps[int(curr_test_sprog_speed*10)]
+                                        print("New approximate speed: " + str(new_approx_speed))
+                                        if(new_approx_speed < new_speed_max):
+                                            speed_change_good = True
+                                    change_in_sprog_speed = curr_test_sprog_speed - train2.sprog_speed
+                                    print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
+                                    print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
+                                    
+                                    self.changeTrainSpeed(train2,change_in_sprog_speed)
+                                    return # Stop looking for collisions, fix is in place
+                                elif(train1.sprog_speed < 0.9):
+                                    # Speed up train 1
+
+                                    print("-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------")
+                                    print("Train 1 speeding up?")
+                                    speed_steps = train1.getSpeedStepsArray()
+                                    print("Speed steps: " + str(speed_steps))
+                                    curr_test_sprog_speed = train1.sprog_speed
+                                    print("Current train sprog speed: " + str(curr_test_sprog_speed))
+                                    speed_change_good = False
+                                    new_speed_min = train1Dist / (train2TimeToTurnout - self.TURNOUT_COLLISION_TIME_BUFFER)
+                                    while(curr_test_sprog_speed < 0.9 and speed_change_good == False):
+                                        curr_test_sprog_speed += 0.2
+                                        print("Current testing sprog speed: " + str(curr_test_sprog_speed))
+                                        new_approx_speed = speed_steps[int(curr_test_sprog_speed*10)]
+                                        print("New approximate speed: " + str(new_approx_speed))
+                                        if(new_approx_speed > new_speed_min):
+                                            speed_change_good = True
+                                    change_in_sprog_speed = curr_test_sprog_speed - train1.sprog_speed
+                                    print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
+                                    print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
+
+                                    self.changeTrainSpeed(train1,0.2)
+                                    return # Stop looking for collisions, fix is in place
+                                else:
+                                    #This option means that train 2 cannot slow down, and train 1 cannot speed up
+                                    # FIGURE OUT WHAT TO DO HERE
+                                    print("CASE 3 FIX ME!")
+                                    return # Stop looking for collisions, fix is in place
+
+                        
+                    
 
 
 
@@ -456,22 +608,37 @@ class TrainLayout:
                     temp = self.processBlockForTrainCW(block.left_block_turn, checkDist, currentDist)
                     returnArray.extend(temp)
         return returnArray
+
+    # Function to change the speed of a train, including updating the train
+    #  before changing speed
+    def changeTrainSpeed(self, train, sprog_speed_change):
+        ## DELETE ME (NEXT 2 LINES)
+        if train.sprog_speed == 1.0 and sprog_speed_change == -0.2:
+            sprog_speed_change = -0.4
+        new_speed = train.sprog_speed + sprog_speed_change
+        os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(train.train_id) + " " + str(new_speed))
+        print("Changing the speed of " + str(train.train_id) + " to " + str(new_speed) + " from " + str(train.sprog_speed))
+        train.updateTrain(datetime.datetime.utcnow())
+        change_time = train.setNewSPROGSpeed(new_speed)
+        self.fix_time_remaining = change_time + self.FIX_TIME_BUFFER
+        print("Calculated fix time: " + str(self.fix_time_remaining))
+        self.time_of_last_check = datetime.datetime.utcnow()
         
         
 
     def breakerActivated(self, breaker, time_of_break):
         print("Activated: " + str(breaker.breaker_id))
 
-##        if(breaker.breaker_id == 2 and self.trains[0].speed_slots_count > 5):
+##        if(breaker.breaker_id == 8 and self.trains[0].speed_slots_count > 5):
 ##            new_speed = 0.0
 ##            if(self.state == 0):
-##                new_speed = 0.6
+##                new_speed = 0.4
 ##                self.state = 1
 ##            elif(self.state == 1):
-##                new_speed = 0.4
+##                new_speed = 1.0
 ##                self.state = 2
 ##            elif(self.state == 2):
-##                new_speed = 1.0
+##                new_speed = 0.2
 ##                self.state = 0
 ##            os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py 1 " + str(new_speed))
 ##            self.trains[0].updateTrain(datetime.datetime.utcnow())
@@ -560,7 +727,7 @@ class TrainLayout:
         if train_to_update == None:
             #if(initialized == True):
                 #os.system("sudo python /home/pi/teamge/user/Matt/setYellow.py")
-            print("NO TRAIN COULD HAVE SET THIS OFF!!")
+            print("--------------------------------------------------------------------NO TRAIN COULD HAVE SET THIS OFF!!")
         else:
             #Update the train that was selected for update
             #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
@@ -583,14 +750,17 @@ class TrainLayout:
                         pair_distance = pair.distance
                         break
                 if(pair_distance == 0):
-                    print("PAIR DISTANCE IS ZERO" + str(train_to_update.last_breaker_hit) + str(breaker.breaker_id))
+                    print("---------------------------------------------------------------------PAIR DISTANCE IS ZERO--------" + str(train_to_update.last_breaker_hit) + str(breaker.breaker_id))
                 print("Pair Distance: " + str(pair_distance))
                 print("Time: " + str(((time_of_break-train_to_update.time_of_last_hit).total_seconds())))
-                train_to_update.setSpeedForAverage(pair_distance/((time_of_break-train_to_update.time_of_last_hit).total_seconds()))
-                #train.speed = pair_distance/((time_of_break-train.time_of_last_hit).total_seconds())
-                if(train_to_update.direction == "clockwise"):
-                    train_to_update.speed *= (-1)
-                print("Speed: " + str(train_to_update.speed))
+                if(train_to_update.last_breaker_hit != breaker.breaker_id and train_to_update.changing_speed == False and train_to_update.restart_beam_breaker_hit == False):
+                    train_to_update.setSpeedForAverage(pair_distance/((time_of_break-train_to_update.time_of_last_hit).total_seconds()))
+                    #train.speed = pair_distance/((time_of_break-train.time_of_last_hit).total_seconds())
+                    if(train_to_update.direction == "clockwise"):
+                        train_to_update.speed *= (-1)
+                    print("Speed: " + str(train_to_update.speed))
+                elif(train_to_update.changing_speed == False and train_to_update.restart_beam_breaker_hit == True):
+                    train_to_update.restart_beam_breaker_hit = False
                 train_to_update.distance_in_block = 0
                 train_to_update.current_block = breaker.block
                 #Update last breaker hit and time of hit and update
@@ -699,10 +869,12 @@ class Train:
 
         #Variables for when slowing down and speeding up
         self.CHANGE_RATE = 8
+        self.LAG_TIME = 1.5
         self.remaining_lag_time = 0
         self.remaining_change_time = 0
         self.changing_speed = False
         self.speeding_up = None
+        self.restart_beam_breaker_hit = False # DELETE ME I AM UNNECESSARY!
 
         #number of slots in the array of speeds for the train
         self.speed_slots = 10
@@ -852,22 +1024,24 @@ class Train:
                 print("Last update time: " + str(self.last_update_time))
                 print("Remaining change time: " + str(self.remaining_change_time))
 
-                
+    # Set the new sprog speed for the train and prepare for the change in speed
+    #  Also return the remaining lag time + remaining change time for collision checking purporses
     def setNewSPROGSpeed(self, sprog_speed):
         #Only change if the new sprog speed is different
         if(sprog_speed != self.sprog_speed):
-            print("SETTING SPROG SPEED #KJ#KHJLKLJHDGSJKLHGSDJKLHGDSJKLDSGJKLHDGSJ---------------------------------------------KHL")
+            print("SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------")
             if(self.sprog_speed > sprog_speed):
                 #We are slowing down
                 self.speeding_up = False
             else:
                 self.speeding_up = True
             self.sprog_speed = sprog_speed
-            self.remaining_lag_time = 1.5
-            if(self.train_id == 1):
-                calculated_new_speed = self.sprog_speed_steps_array_1_wheels[int(sprog_speed*10)]
-            elif(self.train_id == 3):
-                calculated_new_speed = self.sprog_speed_steps_array_3[int(sprog_speed*10)]
+            self.remaining_lag_time = self.LAG_TIME
+##            if(self.train_id == 1):
+##                calculated_new_speed = self.sprog_speed_steps_array_1_wheels[int(sprog_speed*10)]
+##            elif(self.train_id == 3):
+##                calculated_new_speed = self.sprog_speed_steps_array_3[int(sprog_speed*10)]
+            calculated_new_speed = (self.getSpeedStepsArray())[int(sprog_speed*10)]
             #calculated_new_speed = 0.0
             #if(sprog_speed != 0.0):
                 #calculated_new_speed = 46.9638*(sprog_speed)**4 - 87.7101*(sprog_speed)**3 + 28.4170*(sprog_speed)**2 + 30.1290*(sprog_speed)-.0226
@@ -877,6 +1051,8 @@ class Train:
             print("Speed diff: " + str(speed_diff))
             self.remaining_change_time = speed_diff/self.CHANGE_RATE
             self.changing_speed = True
+            self.restart_beam_breaker_hit = True
+            return self.remaining_lag_time + self.remaining_change_time
 
     def setSpeedForAverage(self, speed):
 
@@ -889,6 +1065,12 @@ class Train:
         #  change it back to negative if clockwise
         self.speed = abs(sum(self.speed_array)/float(len(self.speed_array)))
         print("Speed array: " + str(self.speed_array))
+
+    def getSpeedStepsArray(self):
+        if(self.train_id == 1):
+            return self.sprog_speed_steps_array_1_wheels
+        elif(self.train_id == 3):
+            return self.sprog_speed_steps_array_3
 
 
     def __str__(self):
@@ -907,6 +1089,8 @@ class Turnout:
         self.current_state = "straight"
         self.pi2IP = "35.9.22.241"
         self.orientation = orientation
+        self.block = None
+        self.distance_in_block = None
 
         # Send signal to make physical turnout to straight
         #time.sleep(2)
@@ -944,29 +1128,46 @@ class Turnout:
             self.activateStraight()
             
     # send the signal to activate the correct pin on the pi
-    def __activateRelay(self, pin_num, time_delay=0.4):
+    def __activateRelay(self, pin_num):
         #Activate the pin for the duration of the time delay, then shut off
-        print("ACTIVATING")
+        print("ACTIVATING TURNOUT --------------------------------------------------------------------TURNOUT----------------")
         os.system("python /home/pi/teamge/user/josh/CommunicationSendTest.py " + self.pi2IP + " " + str(pin_num))
-        # CALL: the os.execute file that will send signal to activate correct relay
+
+    # set the block and distance in block for the turnout
+    def setBlock(self, block, dist_in_block):
+        self.block = block
+        self.distance_in_block = dist_in_block
 
 
 # Main Program
-layout=TrainLayout()
+
+#Set up the input arguments
+train1_segment = 0
+train2_segment = 0
+if(len(sys.argv) == 2):
+    train1_segment = sys.argv[1]
+if(len(sys.argv) >= 3):
+    train1_segment = sys.argv[1]
+    train2_segment = sys.argv[2]
+layout=TrainLayout(int(train1_segment),int(train2_segment))
 print("started")
 output = " "
 ser = serial.Serial('/dev/ttyACM0', 9600, 8, 'N', 1, timeout=1)
 
 while True:
-    
-    while output != "":
-        output = ser.readline()
-        if output.strip() != "":
-            #print output.strip()
-            beam_break = int(output.strip())
-            #print beam_break
-            #Call activated here!
-            layout.activateBreaker(beam_break)
-    #Update trains here!
-    output = " "
-    layout.updateTrains()
+    try:
+        while output != "":
+            output = ser.readline()
+            if output.strip() != "":
+                #print output.strip()
+                beam_break = int(output.strip())
+                #print beam_break
+                #Call activated here!
+                layout.activateBreaker(beam_break)
+        #Update trains here!
+        output = " "
+        layout.updateTrains()
+    except KeyboardInterrupt:
+        print(" Ending program")
+        os.system("python /home/pi/teamge/user/Matt/turnTrackOffOfficial.py")
+        sys.exit()
