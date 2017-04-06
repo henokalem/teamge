@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+
+<html>
+
+<head>
+    <style type="text/css" media="screen">
+        canvas, img { display:block; margin:1em auto; border:1px solid black; }
+        canvas { background:url(./CurrentLayout.bmp) }
+        canvas { background-size: 1200px 700px; }
+    </style>
+</head>
+
+<body>
+    <canvas id="train" width="1200" height="700" style="border:1px solid #000000;">
+    </canvas>
+</body>
+
+</html>
+
+
+<script text="javascript">
+
+    window.onload = function() {
+        var c = document.getElementById("train");
+        var ctx = c.getContext("2d");
+        ctx.fillStyle = "#FF0000";
+        var old = null;  
+        var points = [
+                      [10, 280], // far left center outer loop (3 up)
+                      [10, 380], // moving counter clockwise
+                      [20, 500],
+                      [90, 600],
+                      [220, 660],
+                      [360, 670],
+                      [490, 670],
+                      [650, 670],
+                      [800, 670],
+                      [960, 655],
+                      [1080, 600],
+                      [1155, 500],
+                      [1165, 380],
+                      [1165, 280],
+                      [1155, 180],
+                      [1080, 80],
+                      [950, 15],
+                      [800, 10],
+                      [650, 10],
+                      [525, 10],
+                      [400, 10],
+                      [225, 15],
+                      [100, 70],
+                      [25, 170], // 4 up on left side
+                      [170, 170], // not including top
+                      [160, 280], 
+                      [175, 390], 
+                      [240, 480], 
+                      [370, 540], 
+                      [500, 550], 
+                      [660, 550], 
+                      [800, 540], 
+                      [940, 480], 
+                      [1015, 360], 
+                      [1015, 280], 
+                      [1005, 180], 
+                      [930, 70], // 7 up in inner circle (right before turn in inner)
+                      [510, 480], // inner piece / dead end
+                      [430, 385], // middle piece in dead end
+                      [370, 300], // top piece in dead end 
+                      [1005, 500], // connection of inner and outer on bottom right 
+                      [930, 600], // bottom piece
+                     ];
+
+         var blocks = [
+                      [550, 10],   // block 1
+                      [25, 170],   // block 2
+                      [500, 670],  // block 3
+                      [875, 670],  // block 4
+                      [1080, 600], // block 5
+                      [1155, 180], // block 6
+                      [720, 10],   // block 7
+                      [160, 280],  // block 8
+                      [580, 550],  // block 9
+                      [800, 540],  // block 10
+                      [940, 480],  // block 11
+                      [1015, 320], // block 12
+                      [975, 120],  // block 13
+                      [930, 600],  // block 14
+                      [1005, 500], // block 15
+                      [370, 300],  // block 16
+                      [510, 480],  // block 17
+                      ];
+
+        
+        var len = blocks.length;
+        for (i=0; i<len; i++) {
+            ctx.fillRect(blocks[i][0], blocks[i][1], 25, 25);
+        }
+
+        var connection = new WebSocket('ws://127.0.0.1:50007');
+        connection.onopen = function() {
+            console.log("Connected");
+            // connection.send('Ping');
+        }
+
+        connection.onerror = function(error) {
+            console.log("Websocket Error " + error);
+        }
+
+        connection.onmessage = function(e) {
+            console.log(e.data);
+        } 
+
+        function draw(key) {
+            if (old != null) {
+                ctx.clearRect(old[0], old[1], 25, 25);
+            } 
+            old = points[key];
+            ctx.fillRect(old[0], old[1], 25, 25);
+            return old;
+        }
+    }
+    
+</script>
