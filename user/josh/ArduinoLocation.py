@@ -6,6 +6,7 @@ import datetime
 import os
 import csv
 import sys
+#import lightHandler
 
 
 #Class for beam breakers
@@ -67,13 +68,13 @@ class TrainLayout:
         #print("Train 1 starting segment: " + str(train1_start_segment))
         #print("Train 2 starting segment: " + str(train2_start_segment))
         if(train1_start_segment != 0):
-            train1 = Train(1,train1_start_segment)
+            train1 = Train(3,train1_start_segment)
             train1.sprog_speed = train1_start_speed
             print("Setting Train " + str(train1.train_id) + " to have SPROG speed: " + str(train1.sprog_speed))
             os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(train1.train_id) + " " + str(train1.sprog_speed))
             self.trains.append(train1)
         if(train2_start_segment != 0):
-            train2 = Train(3,train2_start_segment)
+            train2 = Train(4,train2_start_segment)
             train2.sprog_speed = train2_start_speed
             print("Setting Train " + str(train2.train_id) + " to have SPROG speed: " + str(train2.sprog_speed))
             os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(train2.train_id) + " " + str(train2.sprog_speed))
@@ -179,7 +180,9 @@ class TrainLayout:
         self.beam_breakers.append(BeamBreaker(8,1,5,self.blocks[9-1],self))
         self.beam_breakers.append(BeamBreaker(9,1,2,self.blocks[3-1],self))
 
-        os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
+
+        #self.light = lightHandler.lightHandler()
+        #self.light.setGreen()
         os.system("sudo python /home/pi/teamge/user/Matt/turnTrackOnOfficial.py")
 
 ##        time.sleep(1)
@@ -360,6 +363,7 @@ class TrainLayout:
                         #Make sure time to reach is greater than lag time to change turnout
                         if(time_to_reach > self.LAG_TIME):
                             print("SWITCHING A TURNOUT: " + str(distTuple[0].turnout_id))
+                            #self.light.setYellow()
                             self.fix_time_remaining = time_to_reach
                             print("Fix time remaining: " + str(self.fix_time_remaining))
                             self.time_of_last_check = datetime.datetime.utcnow()
@@ -372,6 +376,7 @@ class TrainLayout:
                 time_to_collision = otherTrainDist/(otherTrain.speed - checkTrain.speed)
                 if(time_to_collision < self.COLLISION_TIME_BUFFER or otherTrainDist <  self.TRAIN_DISTANCE_BUFFER):
                     #Slow down back train (other train) or speed up front train (check train)
+##                    #self.light.setYellow()
                     print("Case: train is catching up and cannot swtich turnout in time")
                     if(otherTrain.sprog_speed > 0.5):
 
@@ -435,8 +440,8 @@ class TrainLayout:
                         #Make sure time to reach is greater than lag time to change turnout
                         if(time_to_reach > self.LAG_TIME):
                             print("SETTING LIGHT TO YELLOW")
-                            #os.system("sudo python /home/pi/teamge/user/Matt/setYellow.py")
                             print("SWITCHING A TURNOUT: " + str(distTuple[0].turnout_id))
+                            #self.light.setYellow()
                             self.fix_time_remaining = time_to_reach
                             print("Fix time remaining: " + str(self.fix_time_remaining))
                             self.time_of_last_check = datetime.datetime.utcnow()
@@ -540,6 +545,7 @@ class TrainLayout:
                                     # go down by 0.2 to prevent trains from having same sprog speed, keeps things interesting
 
                                     # Want to change speed so that train1TimeToTurnout - train2TimeToTurnout > self.TURNOUT_COLLISION_TIME_BUFFER
+                                    
                                     print("-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------")
                                     print("Train 1 slowing down?")
                                     speed_steps = train1.getSpeedStepsArray()
@@ -645,6 +651,7 @@ class TrainLayout:
                                     print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
                                     print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
 
+                                    #self.light.setGreen()
                                     self.changeTrainSpeed(train1,change_in_sprog_speed)
                                     return # Stop looking for collisions, fix is in place
                                 else:
@@ -654,6 +661,7 @@ class TrainLayout:
                                     self.changeTrainSpeed(train1,-0.4)
                                     self.changeTrainSpeed(train2,0.4)
                                     print("--------------------------------------------------------------CASE 3 SLOW 1 SPEED 2!----------------------")
+                                    #self.light.setGreen()
                                     return # Stop looking for collisions, fix is in place
 
                         
@@ -720,6 +728,7 @@ class TrainLayout:
         print("Changing the speed of " + str(train.train_id) + " to " + str(new_speed) + " from " + str(train.sprog_speed))
         train.updateTrain(datetime.datetime.utcnow())
         change_time = train.setNewSPROGSpeed(new_speed)
+        #self.light.setYellow()
         self.fix_time_remaining = change_time + self.FIX_TIME_BUFFER
         print("Calculated fix time: " + str(self.fix_time_remaining))
         self.time_of_last_check = datetime.datetime.utcnow()
@@ -729,8 +738,8 @@ class TrainLayout:
     def breakerActivated(self, breaker, time_of_break):
         print("Activated: " + str(breaker.breaker_id))
 
-##        if(breaker.breaker_id == 8 and self.trains[0].speed_slots_count > 5):
-##            new_speed = 0.0
+        if(breaker.breaker_id == 2 and self.trains[0].speed_slots_count > 5):
+            new_speed = 0.0
 ##            if(self.state == 0):
 ##                new_speed = 0.4
 ##                self.state = 1
@@ -740,9 +749,9 @@ class TrainLayout:
 ##            elif(self.state == 2):
 ##                new_speed = 0.2
 ##                self.state = 0
-##            os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py 1 " + str(new_speed))
-##            self.trains[0].updateTrain(datetime.datetime.utcnow())
-##            self.trains[0].setNewSPROGSpeed(new_speed)
+            os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py 3 " + str(new_speed))
+            self.trains[0].updateTrain(datetime.datetime.utcnow())
+            self.trains[0].setNewSPROGSpeed(new_speed)
 
         #Code for on activation
         #See if trains are all initialized
@@ -830,7 +839,7 @@ class TrainLayout:
             print("--------------------------------------------------------------------NO TRAIN COULD HAVE SET THIS OFF!!")
         else:
             #Update the train that was selected for update
-            #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
+            #self.light.setGreen()
             print("Checking train: " + str(train_to_update.train_id))
             if((time_of_break-train_to_update.time_of_last_hit).total_seconds()!=0.0):
                 print("Inside first check")
@@ -981,7 +990,9 @@ class Train:
         self.speed_slots_count = 0
         self.speed_array = []
         self.sprog_speed_steps_array_1_wheels = [0,.5,5.140,8.965,11.571,13.189,14.286,15.291,16.144,16.821,17.357]
+        self.sprog_speed_steps_array_1 = [0,1,2,3,4,5,6,7,8,13.0761,14.1569]
         self.sprog_speed_steps_array_3 = [0,.4817,6.4,9.81,12.42,13.99,14.7,15.99,16.78,17.355,17.75]
+        self.sprog_speed_steps_array_4 = [0,1,2,3,4,5,6,7,8,9,6.3020]
 
     def updateTrain(self, time_of_update):
         elapsed_time = (time_of_update - self.last_update_time).total_seconds()
@@ -1007,7 +1018,7 @@ class Train:
                 self.distance_in_block = new_dist
                 self.last_update_time = time_of_update
             else:
-                #os.system("sudo python /home/pi/teamge/user/Matt/setYellow.py")
+                #self.light.setYellow()
                 print("Negative elapsed time???")
         else:
             print("Updating train as changing speed")
@@ -1171,6 +1182,8 @@ class Train:
             return self.sprog_speed_steps_array_1_wheels
         elif(self.train_id == 3):
             return self.sprog_speed_steps_array_3
+        elif(self.train_id == 4):
+            return self.sprog_speed_steps_array_4
 
 
     def __str__(self):
@@ -1275,4 +1288,5 @@ while True:
     except KeyboardInterrupt:
         print(" Ending program")
         os.system("python /home/pi/teamge/user/Matt/turnTrackOffOfficial.py")
+        os.system("sudo python /home/pi/teamge/user/Matt/lightOff.py")
         sys.exit()

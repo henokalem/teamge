@@ -37,7 +37,7 @@ class Turnout:
             self.__activateRelay(self.turn_pin_num)
 
     # send the signal to activate the correct pin on the pi
-    def __activateRelay(self, pin_num, time_delay=0.4):
+    def __activateRelay(self, pin_num, time_delay=0.3):
         #Activate the pin for the duration of the time delay, then shut off
         GPIO.output(pin_num, GPIO.HIGH)
         print ("pin: " + str(pin_num), "state: HIGH, time: ", time.time())

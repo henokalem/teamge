@@ -36,6 +36,7 @@ while True:
     GPIO.setmode(GPIO.BCM)
     GPIO.setup(pin_num, GPIO.OUT)
 
+    time.sleep(1)
     GPIO.output(pin_num, GPIO.HIGH)
     time.sleep(0.3)
     GPIO.output(pin_num, GPIO.LOW)

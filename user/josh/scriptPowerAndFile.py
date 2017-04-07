@@ -59,11 +59,11 @@ class TrainHandler(jmri.jmrit.automat.AbstractAutomaton) :
                     print("Could not open file")
 
                 print "Throttle"
-                self.throttle = self.getThrottle(3, False)
+                self.throttle = self.getThrottle(int(self.trains[0].decoderID), False)
                 print "After throttle"
 
                 print "Throttle 2"
-                self.throttle1 = self.getThrottle(1, False)
+                self.throttle1 = self.getThrottle(int(self.trains[1].decoderID), False)
                 print "after throttle 2"
 
                 return
