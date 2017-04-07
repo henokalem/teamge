@@ -1,0 +1,54 @@
+def CheckBlockCCW(self, block, checkDist, currentDist):
+    returnArray = []
+    if block != None:
+        for train in self.trains:
+            if train.current_block == block and train.distance_in_block < checkDist:
+                returnArray.append((train, currentDist+train.distance_in_block))
+        if block.turnout_left != None:
+            returnArray.append((block.turnout_left, currentDist))
+        if checkDist > block.distance:
+            checkDist -= block.distance
+            currentDist += block.distance
+            temp = self.checkBlockCCW(block.right_block_straight, checkDist, currentDist)
+            returnArray.extend(temp)
+            if block.turnout_right != None:
+                    returnArray.append((block.turnout_right, currentDist))
+                    temp = self.checkBlockCCW(block.right_block_turn, checkDist, currentDist)
+                    returnArray.extend(temp)
+    return returnArray
+    
+def processBlockForTrainCCW(self, block, checkDist, currentDist):
+    returnArray = checkBlockCCW(block, checkDist, currentDist)
+    returnArray = self.stripOfTurnouts(returnArray)
+    return returnArray
+    
+def stripOfTurnouts(array):
+    returnArray = []
+    for tuple in array:
+        if isinstance(tuple[0], Train):
+            returnArray.append(tuple)
+    return returnArray
+    
+def checkBlockCW(self, block, checkDist, currentDist):
+        returnArray = []
+        if block != None:
+            for train in self.trains:
+                if train.current_block == block and block.distance-train.distance_in_block < checkDist:
+                    returnArray.append((train, currentDist+block.distance-train.distance_in_block))
+            if block.turnout_right != None:
+                returnArray.append((block.turnout_right, currentDist))
+            if checkDist > block.distance:
+                checkDist -= block.distance
+                currentDist += block.distance
+                temp = self.checkBlockCW(block.left_block_straight, checkDist, currentDist)
+                returnArray.extend(temp)
+                if block.turnout_left != None:
+                    returnArray.append((block.turnout_left, currentDist))
+                    temp = self.checkBlockCW(block.left_block_turn, checkDist, currentDist)
+                    returnArray.extend(temp)
+        return returnArray
+        
+def processBlockForTrainCW(self, block, checkDist, currentDist):
+    returnArray = checkBlockCW(block, checkDist, currentDist)
+    returnArray = self.stripOfTurnouts(returnArray)
+    return returnArray
