@@ -1,6 +1,8 @@
 import csv
 
-
+#used to change the speed of a train
+#takes in train ID and SPROG speed
+#opens the train properties file, finds train, and changes its speed
 class speedChanger:
     def __init__(self):
         a=0

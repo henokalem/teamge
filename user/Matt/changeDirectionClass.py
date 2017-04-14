@@ -1,5 +1,10 @@
 import csv
 
+
+#takes in an int, the ID of the train to change
+#opens the trainProperties.txt file, finds the train, and changes its direction to the opposite
+#True -> False, False -> True
+#Then saves the file and closes
 class directionChanger:
     def __init__(self):
         a=1

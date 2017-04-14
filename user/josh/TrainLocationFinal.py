@@ -13,29 +13,32 @@ import lightHandler
 class BeamBreaker:
     def beamBroken(self):
         time = datetime.datetime.utcnow()
+        # Sometimes when starting up, the Arduino shows that one or two beam breakers have gone off (for no reason).
+        #  so wait for a small amount of time since the start of the program before allowing beam breaker inputs to be counted as real
         if (time-self.beam_breaker_bank.time_since_start).total_seconds() < 10:
-            print("Time since program start: " + str((time-self.beam_breaker_bank.time_since_start).total_seconds()))
-        #print("Time since last activation: " + str(datetime.datetime.utcnow()-self.time_of_last_break))
-        #Test to see if the beam breaker has not been hit in the last WAIT_TIME amount of seconds, and that it has gone off at least 3
-        #seconds after the program started (which avoids the beginning noise from when first reading from aruduino)
-        if (datetime.datetime.utcnow() - self.time_of_last_break).total_seconds() > self.wait_time and (time-self.beam_breaker_bank.time_since_start).total_seconds() > 10:
-            #Call breakerActivated function
+            if self.beam_breaker_bank.debug: print("Time since program start: " + str((time-self.beam_breaker_bank.time_since_start).total_seconds()))
+        #Test to see if the beam breaker has not been hit in the last WAIT_TIME amount of seconds
+        elif (datetime.datetime.utcnow() - self.time_of_last_break).total_seconds() > self.wait_time:
             self.beam_breaker_bank.breakerActivated(self, time)
         else:
-            #Time was too short, was same train
-            #print("The same train activated the beam break! ID: ", self.breaker_id)
-            a=2
+            if self.beam_breaker_bank.debug: print("The same train activated the beam break! ID: ", self.breaker_id)
+        # Update time of last break
         self.time_of_last_break = datetime.datetime.utcnow()
 
     #Constructor
-    # Left and right blocks determined by Couner-clockwise orienation
+    # breaker_id: The id of the beam breaker
+    # left_segment: The segment to the left of the beam breaker, in counter-clockwise orientation
+    # right_segment: The segment to the right of the beam breaker, in counter-clockwise orientation
+    # block: The block this beam breaker is in. For beam breakers, it is considered to be in the block to the right
+    #        of the breaker (in counter-clockwise orientation), at a distance of 0 in the block
+    # beam_breaker_bank: The controller that handles the beam breaker activation
     def __init__(self, breaker_id, left_segment, right_segment, block, beam_breaker_bank):
         self.breaker_id = breaker_id
         self.block = block
         self.beam_breaker_bank = beam_breaker_bank
         self.left_segment = left_segment
         self.right_segment = right_segment
-        self.wait_time = 1
+        self.wait_time = 1 # The time since breaker was last hit to ignore any other hits registered, avoids interference
         self.time_of_last_break = datetime.datetime.utcnow()
 
 # Class for holding all of the beam breakers
@@ -68,6 +71,7 @@ class TrainLayout:
         self.fix_time_remaining = 0
         self.time_of_last_check = datetime.datetime.utcnow()
         self.time_of_last_turnout_activation = datetime.datetime.utcnow()
+        self.debug = True
 
         
     

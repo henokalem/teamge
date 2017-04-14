@@ -1,6 +1,9 @@
 from neopixel import *
 import time
 
+#used to directly control the GE light
+#sets up the light with the LED count, pin number, etc.
+#receives data from pi, puts the color for each LED into the buffer, then pushes the change to the light itself
 class GELight:
     #constructor
     def __init__(self):

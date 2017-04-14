@@ -1,5 +1,6 @@
 import csv
 
+#sets the train config file to turn off the track when read next
 class trainOff:
     def __init__(self):
         a=0

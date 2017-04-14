@@ -1,5 +1,6 @@
 import csv
 
+#sets the train config file to turn on the track/continue to run
 class trainOn:
     def __init__(self):
         a=0

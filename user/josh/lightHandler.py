@@ -21,7 +21,10 @@ class lightHandler:
         #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
         self.timeOfLastUpdate = datetime.datetime.utcnow()
 	self.greenCounter = 0	
- 
+
+#sets light to green
+#because of the weird bug that changes the light to magenta or some other random color, it forces it to refresh every 3rd call, regardless of whether or not it's green 
+#"train is good"
     def setGreen(self):
         currentTime = datetime.datetime.utcnow()
         print("currentTime for light change: " + str(currentTime))
@@ -53,6 +56,10 @@ class lightHandler:
             print("------------------------------------------------------Light is already green!")
            
 
+#sets light to yellow
+#used to show that a train is speeding up, slowing down, or a turnout is going off
+#once the change is done, it goes back to green (not in this code)
+#"change is happening to a train"
     def setYellow(self):
         currentTime = datetime.datetime.utcnow()
         print("currentTime for light change: " + str(currentTime))
@@ -73,7 +80,10 @@ class lightHandler:
         else:
             print("------------------------------------------------------Light is already Yellow!")
 
-
+#sets light to red
+#used to show that the trains crashed and need to be fixed
+#program needs to be restarted to get rid of this
+#"trains crashed, fix now"
     def setRed(self):
         currentTime = datetime.datetime.utcnow()
         print("currentTime for light change: " + str(currentTime))
@@ -94,6 +104,8 @@ class lightHandler:
         else:
             print("------------------------------------------------------Light is already Red!")
  
+#changes light to white
+#used in debugging
     def setWhite(self):
         currentTime = datetime.datetime.utcnow()
         print("currentTime for light change: " + str(currentTime))
