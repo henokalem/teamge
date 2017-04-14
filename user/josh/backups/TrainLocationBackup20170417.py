@@ -221,120 +221,45 @@ class TrainLayout:
         # Insert code to send locations to html 
 
     def checkForCollisions(self):
-##        print("Checking for collision cases")
-##        #Only check the first train since there are only 2 trains, will do actions on either/both trains depending on what needs to be done
-##        checkTrain = self.trains[0]
-##        otherTrain = self.trains[1]
-##        #will be checking 40" in front and behind the train, so distance = 0 means at the train
-##        checkDistance = 40
-##        currentDistance = 0
-##        CCWArray = []
-##        CWArray = []
-##
-##        # Check in the counter-clockwise direction
-##        if otherTrain.current_block == checkTrain.current_block and otherTrain.distance_in_block > checkTrain.distance_in_block and (otherTrain.distance_in_block - checkTrain.distance_in_block) < checkDistance:
-##            CCWArray.append((otherTrain, otherTrain.distance_in_block - checkTrain.distance_in_block))
-##        if checkDistance > checkTrain.current_block.distance - checkTrain.distance_in_block:
-##            checkDistance -= checkTrain.current_block.distance - checkTrain.distance_in_block
-##            currentDistance += checkTrain.current_block.distance - checkTrain.distance_in_block
-##            appendArray = self.checkBlockCCW(checkTrain.current_block.right_block_straight, checkDistance, currentDistance)
-##            CCWArray.extend(appendArray)
-##            if checkTrain.current_block.right_block_turn != None:
-##                CCWArray.append((checkTrain.current_block.turnout_right, checkTrain.current_block.distance - checkTrain.distance_in_block))
-##                appendArray = self.checkBlockCCW(checkTrain.current_block.right_block_turn, checkDistance, currentDistance)
-##                CCWArray.extend(appendArray)
-##        print(CCWArray)
-##
-##        # Check in the clockwise direction
-##        checkDistance = 40
-##        currentDistance = 0
-##
-##        if otherTrain.current_block == checkTrain.current_block and otherTrain.distance_in_block < checkTrain.distance_in_block and (checkTrain.distance_in_block - otherTrain.distance_in_block) < checkDistance:
-##            CWArray.append((otherTrain, checkTrain.distance_in_block - otherTrain.distance_in_block))
-##        if checkDistance > checkTrain.distance_in_block:
-##            checkDistance -= checkTrain.distance_in_block
-##            currentDistance += checkTrain.distance_in_block
-##            appendArray = self.checkBlockCW(checkTrain.current_block.left_block_straight, checkDistance, currentDistance)
-##            CWArray.extend(appendArray)
-##            if checkTrain.current_block.left_block_turn != None:
-##                CWArray.append((checkTrain.current_block.turnout_left, checkTrain.distance_in_block))
-##                appendArray = self.checkBlockCW(checkTrain.current_block.left_block_turn, checkDistance, currentDistance)
-##                CWArray.extend(appendArray)
-##        print(CWArray)
-
+        print("Checking for collision cases")
+        #Only check the first train since there are only 2 trains, will do actions on either/both trains depending on what needs to be done
         checkTrain = self.trains[0]
         otherTrain = self.trains[1]
+        #will be checking 40" in front and behind the train, so distance = 0 means at the train
+        checkDistance = 40
+        currentDistance = 0
         CCWArray = []
         CWArray = []
-        
-        checkDist = 40
-        currentDist = 0
 
         # Check in the counter-clockwise direction
-        print("Check in the counter-clockwise direction")
-        if otherTrain.current_block == checkTrain.current_block and otherTrain.distance_in_block > checkTrain.distance_in_block and (otherTrain.distance_in_block - checkTrain.distance_in_block) < checkDist:
-            CCWArray.append((otherTrain, otherTrain.distance_in_block - checkTrain.distance_in_block, True))
-        if checkDist > checkTrain.current_block.distance - checkTrain.distance_in_block:
-            checkDist -= checkTrain.current_block.distance - checkTrain.distance_in_block
-            currentDist += checkTrain.current_block.distance - checkTrain.distance_in_block
-            if checkTrain.current_block.turnout_right == None:
-                temp = self.checkBlockCCW(checkTrain.current_block, checkTrain.current_block.right_block_straight, checkDist, currentDist, True, checkTrain.direction)
-                CCWArray.extend(temp)
-            elif checkTrain.current_block.turnout_right != None:
-                CCWArray.append((checkTrain.current_block.turnout_right, currentDist, True))
-                if checkTrain.direction == "counter-clockwise":
-                    #Validity of check depends on which state the turnout is in, since we are going the same direction
-                    # as the turnout orientation
-                    if checkTrain.current_block.turnout_right.current_state == "straight":
-                        temp = self.checkBlockCCW(checkTrain.current_block, checkTrain.current_block.right_block_straight, checkDist, currentDist, True, checkTrain.direction)
-                        CCWArray.extend(temp)
-                        temp2 = self.checkBlockCCW(checkTrain.current_block, checkTrain.current_block.right_block_turn, checkDist, currentDist, False, checkTrain.direction)
-                        CCWArray.extend(temp2)
-                    elif checkTrain.current_block.turnout_right.current_state == "turn":
-                        temp = self.checkBlockCCW(checkTrain.current_block, checkTrain.current_block.right_block_straight, checkDist, currentDist, False, checkTrain.direction)
-                        CCWArray.extend(temp)
-                        temp2 = self.checkBlockCCW(checkTrain.current_block, checkTrain.current_block.right_block_turn, checkDist, currentDist, True, checkTrain.direction)
-                        CCWArray.extend(temp2)
-                if checkTrain.direction == "clockwise":
-                    temp = self.checkBlockCCW(checkTrain.current_block, checkTrain.current_block.right_block_straight, checkDist, currentDist, True, checkTrain.direction)
-                    CCWArray.extend(temp)
-                    temp2 = self.checkBlockCCW(checkTrain.current_block, checkTrain.current_block.right_block_turn, checkDist, currentDist, True, checkTrain.direction)
-                    CCWArray.extend(temp2)
+        if otherTrain.current_block == checkTrain.current_block and otherTrain.distance_in_block > checkTrain.distance_in_block and (otherTrain.distance_in_block - checkTrain.distance_in_block) < checkDistance:
+            CCWArray.append((otherTrain, otherTrain.distance_in_block - checkTrain.distance_in_block,True))
+        if checkDistance > checkTrain.current_block.distance - checkTrain.distance_in_block:
+            checkDistance -= checkTrain.current_block.distance - checkTrain.distance_in_block
+            currentDistance += checkTrain.current_block.distance - checkTrain.distance_in_block
+            appendArray = self.checkBlockCCW(checkTrain.current_block.right_block_straight, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+            CCWArray.extend(appendArray)
+            if checkTrain.current_block.right_block_turn != None:
+                CCWArray.append((checkTrain.current_block.turnout_right, checkTrain.current_block.distance - checkTrain.distance_in_block, True))
+                appendArray = self.checkBlockCCW(checkTrain.current_block.right_block_turn, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+                CCWArray.extend(appendArray)
         print(CCWArray)
-            
-        checkDist = 40
-        currentDist = 0
-        
+
         # Check in the clockwise direction
-        print("Check in the clockwise direction")
-        if otherTrain.current_block == checkTrain.current_block and checkTrain.distance_in_block > otherTrain.distance_in_block and (checkTrain.distance_in_block - otherTrain.distance_in_block) < checkDist:
-            CWArray.append((otherTrain, otherTrain.distance_in_block - checkTrain.distance_in_block, True))
-        if checkDist > checkTrain.distance_in_block:
-            checkDist -= checkTrain.distance_in_block
-            currentDist += checkTrain.distance_in_block
-            if checkTrain.current_block.turnout_left == None:
-                temp = self.checkBlockCW(checkTrain.current_block, checkTrain.current_block.left_block_straight, checkDist, currentDist, True, checkTrain.direction)
-                CWArray.extend(temp)
-            elif checkTrain.current_block.turnout_left != None:
-                CWArray.append((checkTrain.current_block.turnout_left, currentDist, True))
-                if checkTrain.direction == "clockwise":
-                    #Validity of check depends on which state the turnout is in, since we are going the same direction
-                    # as the turnout orientation
-                    if checkTrain.current_block.turnout_left.current_state == "straight":
-                        temp = self.checkBlockCW(checkTrain.current_block, checkTrain.current_block.left_block_straight, checkDist, currentDist, True, checkTrain.direction)
-                        CWArray.extend(temp)
-                        temp2 = self.checkBlockCW(checkTrain.current_block, checkTrain.current_block.left_block_turn, checkDist, currentDist, False, checkTrain.direction)
-                        CWArray.extend(temp2)
-                    elif checkTrain.current_block.turnout_left.current_state == "turn":
-                        temp = self.checkBlockCW(checkTrain.current_block, checkTrain.current_block.left_block_straight, checkDist, currentDist, False, checkTrain.direction)
-                        CWArray.extend(temp)
-                        temp2 = self.checkBlockCW(checkTrain.current_block, checkTrain.current_block.left_block_turn, checkDist, currentDist, True, checkTrain.direction)
-                        CWArray.extend(temp2)
-                if checkTrain.direction == "counter-clockwise":
-                    temp = self.checkBlockCW(checkTrain.current_block, checkTrain.current_block.left_block_straight, checkDist, currentDist, True, checkTrain.direction)
-                    CWArray.extend(temp)
-                    temp2 = self.checkBlockCW(checkTrain.current_block, checkTrain.current_block.left_block_turn, checkDist, currentDist, True, checkTrain.direction)
-                    CWArray.extend(temp2)
+        checkDistance = 40
+        currentDistance = 0
+
+        if otherTrain.current_block == checkTrain.current_block and otherTrain.distance_in_block < checkTrain.distance_in_block and (checkTrain.distance_in_block - otherTrain.distance_in_block) < checkDistance:
+            CWArray.append((otherTrain, checkTrain.distance_in_block - otherTrain.distance_in_block, True))
+        if checkDistance > checkTrain.distance_in_block:
+            checkDistance -= checkTrain.distance_in_block
+            currentDistance += checkTrain.distance_in_block
+            appendArray = self.checkBlockCW(checkTrain.current_block.left_block_straight, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+            CWArray.extend(appendArray)
+            if checkTrain.current_block.left_block_turn != None:
+                CWArray.append((checkTrain.current_block.turnout_left, checkTrain.distance_in_block, True))
+                appendArray = self.checkBlockCW(checkTrain.current_block.left_block_turn, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+                CWArray.extend(appendArray)
         print(CWArray)
 
 
@@ -352,142 +277,57 @@ class TrainLayout:
             self.light.setGreen()
 
 
-##    def checkBlockCCW(self, block, checkDist, currentDist):
-##        returnArray = []
-##        if block != None:
-##            for train in self.trains:
-##                if train.current_block == block and train.distance_in_block < checkDist:
-##                    returnArray.append((train, currentDist+train.distance_in_block))
-##            if block.turnout_left != None:
-##                returnArray.append((block.turnout_left, currentDist))
-##            if checkDist > block.distance:
-##                checkDist -= block.distance
-##                currentDist += block.distance
-##                temp = self.checkBlockCCW(block.right_block_straight, checkDist, currentDist)
-##                returnArray.extend(temp)
-##                if block.turnout_right != None:
-##                        returnArray.append((block.turnout_right, currentDist))
-##                        temp = self.checkBlockCCW(block.right_block_turn, checkDist, currentDist)
-##                        returnArray.extend(temp)
-##        return returnArray
-
-    def checkBlockCCW(self, previousBlock, block, checkDist, currentDist, validValue, trainDirection):
+    def checkBlockCCW(self, block, checkDist, currentDist, validValue, trainDirection, previousBlock):
         returnArray = []
         newValidValue = validValue
         if block != None:
-            print("Block start: " + str(block.block_id))
+            print("Block: " + str(block.block_id) + ", Previous Block: " + str(previousBlock.block_id))
+            for train in self.trains:
+                if train.current_block == block and train.distance_in_block < checkDist:
+                    returnArray.append((train, currentDist+train.distance_in_block, newValidValue))
             if block.turnout_left != None:
                 returnArray.append((block.turnout_left, currentDist, newValidValue))
-                if trainDirection == "clockwise":
-                    print("Train is clockwise")
-                    # If turnout is not in state leading to this train then just return,
-                    #  since no collision possible from this direction, so change valid value
-                    if block.turnout_left.current_state == "turn" and previousBlock == block.left_block_straight:
-                        print("Turnout is in state turn but previous block was straight")
-                        newValidValue = False
-                    elif block.turnout_left.current_state == "straight" and previousBlock == block.left_block_turn:
-                        print("Turnout is in state straight but previous block was turn")
-                        newValidValue = False
-            for train in self.trains:
-                if train.current_block == block and train.distance_in_block < checkDist:
-                    returnArray.append((train, currentDist+train.distance_in_block, newValidValue))
             if checkDist > block.distance:
                 checkDist -= block.distance
                 currentDist += block.distance
-                if block.turnout_right == None:
-                    temp = self.checkBlockCCW(block, block.right_block_straight, checkDist, currentDist, newValidValue, trainDirection)
-                    returnArray.extend(temp)
-                elif block.turnout_right != None:
-                    returnArray.append((block.turnout_right, currentDist, newValidValue))
-                    if trainDirection == "counter-clockwise":
-                        #Validity of check depends on which state the turnout is in, since we are going the same direction
-                        # as the turnout orientation
-                        if block.turnout_right.current_state == "straight":
-                            temp = self.checkBlockCCW(block, block.right_block_straight, checkDist, currentDist, newValidValue, trainDirection)
-                            returnArray.extend(temp)
-                            temp2 = self.checkBlockCCW(block, block.right_block_turn, checkDist, currentDist, False, trainDirection)
-                            returnArray.extend(temp2)
-                        elif block.turnout_right.current_state == "turn":
-                            temp = self.checkBlockCCW(block, block.right_block_straight, checkDist, currentDist, False, trainDirection)
-                            returnArray.extend(temp)
-                            temp2 = self.checkBlockCCW(block, block.right_block_turn, checkDist, currentDist, newValidValue, trainDirection)
-                            returnArray.extend(temp2)
-                    if trainDirection == "clockwise":
-                        temp = self.checkBlockCCW(block, block.right_block_straight, checkDist, currentDist, newValidValue, trainDirection)
+                temp = self.checkBlockCCW(block.right_block_straight, checkDist, currentDist, newValidValue, trainDirection, block)
+                returnArray.extend(temp)
+                if block.turnout_right != None:
+                        returnArray.append((block.turnout_right, currentDist, newValidValue))
+                        temp = self.checkBlockCCW(block.right_block_turn, checkDist, currentDist, newValidValue, trainDirection, block)
                         returnArray.extend(temp)
-                        temp2 = self.checkBlockCCW(block, block.right_block_turn, checkDist, currentDist, newValidValue, trainDirection)
-                        returnArray.extend(temp2)
-            print("Block end: " + str(block.block_id))
         return returnArray
 
-
-    def checkBlockCW(self, previousBlock, block, checkDist, currentDist, validValue, trainDirection):
+    def checkBlockCW(self, block, checkDist, currentDist, validValue, trainDirection, previousBlock):
         returnArray = []
         newValidValue = validValue
         if block != None:
-            print("Block start: " + str(block.block_id))
-            if block.turnout_right != None:
-                print("Turnout right is not none")
-                returnArray.append((block.turnout_right, currentDist, newValidValue))
-                if trainDirection == "counter-clockwise":
-                    print("Train is counter-clockwise")
-                    # If turnout is not in state leading to this train then just return,
-                    #  since no collision possible from this direction, so change valid value
-                    if block.turnout_right.current_state == "turn" and previousBlock == block.right_block_straight:
-                        print("Turnout is in state turn but previous block was straight")
-                        newValidValue = False
-                    elif block.turnout_right.current_state == "straight" and previousBlock == block.right_block_turn:
-                        print("Turnout is in state straight but previous block was turn")
-                        newValidValue = False
+            print("Block: " + str(block.block_id) + ", Previous Block: " + str(previousBlock.block_id))
             for train in self.trains:
-                if train.current_block == block and train.distance_in_block < checkDist:
-                    returnArray.append((train, currentDist+train.distance_in_block, newValidValue))
+                if train.current_block == block and block.distance-train.distance_in_block < checkDist:
+                    returnArray.append((train, currentDist+block.distance-train.distance_in_block, newValidValue))
+            if block.turnout_right != None:
+                returnArray.append((block.turnout_right, currentDist, newValidValue))
             if checkDist > block.distance:
                 checkDist -= block.distance
                 currentDist += block.distance
-                if block.turnout_left == None:
-                    temp = self.checkBlockCW(block, block.left_block_straight, checkDist, currentDist, newValidValue, trainDirection)
-                    returnArray.extend(temp)
-                elif block.turnout_left != None:
+                temp = self.checkBlockCW(block.left_block_straight, checkDist, currentDist, newValidValue, trainDirection, block)
+                returnArray.extend(temp)
+                if block.turnout_left != None:
                     returnArray.append((block.turnout_left, currentDist, newValidValue))
-                    if trainDirection == "clockwise":
-                        #Validity of check depends on which state the turnout is in, since we are going the same direction
-                        # as the turnout orientation
-                        if block.turnout_left.current_state == "straight":
-                            temp = self.checkBlockCW(block, block.left_block_straight, checkDist, currentDist, newValidValue, trainDirection)
-                            returnArray.extend(temp)
-                            temp2 = self.checkBlockCW(block, block.left_block_turn, checkDist, currentDist, False, trainDirection)
-                            returnArray.extend(temp2)
-                        elif block.turnout_left.current_state == "turn":
-                            temp = self.checkBlockCW(block, block.left_block_straight, checkDist, currentDist, False, trainDirection)
-                            returnArray.extend(temp)
-                            temp2 = self.checkBlockCW(block, block.left_block_turn, checkDist, currentDist, newValidValue, trainDirection)
-                            returnArray.extend(temp2)
-                    if trainDirection == "counter-clockwise":
-                        temp = self.checkBlockCW(block, block.left_block_straight, checkDist, currentDist, newValidValue, trainDirection)
-                        returnArray.extend(temp)
-                        temp2 = self.checkBlockCW(block, block.left_block_turn, checkDist, currentDist, newValidValue, trainDirection)
-                        returnArray.extend(temp2)
-            print("Block end: " + str(block.block_id))
+                    temp = self.checkBlockCW(block.left_block_turn, checkDist, currentDist, newValidValue, trainDirection, block)
+                    returnArray.extend(temp)
         return returnArray
-##    def checkBlockCW(self, block, checkDist, currentDist):
-##        returnArray = []
-##        if block != None:
-##            for train in self.trains:
-##                if train.current_block == block and block.distance-train.distance_in_block < checkDist:
-##                    returnArray.append((train, currentDist+block.distance-train.distance_in_block))
-##            if block.turnout_right != None:
-##                returnArray.append((block.turnout_right, currentDist))
-##            if checkDist > block.distance:
-##                checkDist -= block.distance
-##                currentDist += block.distance
-##                temp = self.checkBlockCW(block.left_block_straight, checkDist, currentDist)
-##                returnArray.extend(temp)
-##                if block.turnout_left != None:
-##                    returnArray.append((block.turnout_left, currentDist))
-##                    temp = self.checkBlockCW(block.left_block_turn, checkDist, currentDist)
-##                    returnArray.extend(temp)
-##        return returnArray
+
+    def switchTurnout(self, turnout, time_to_reach):
+        print("SETTING LIGHT TO YELLOW")
+        print("SWITCHING A TURNOUT: " + str(turnout.turnout_id))
+        self.light.setYellow()
+        self.fix_time_remaining = time_to_reach
+        print("Fix time remaining: " + str(self.fix_time_remaining))
+        self.time_of_last_check = datetime.datetime.utcnow()
+        turnout.switchState()
+        self.time_of_last_turnout_activation = datetime.datetime.utcnow()
             
     def sameDirectionCollisionChecks(self, frontArray, backArray, checkTrain):
         #Check to see if other train is ahead or behind train, and use this to perform checks
@@ -519,16 +359,30 @@ class TrainLayout:
                         time_to_reach = dist_between_train_and_turnout/abs(otherTrain.speed)
                         #Make sure time to reach is greater than lag time to change turnout
                         if(time_to_reach > self.LAG_TIME):
-                            print("SETTING LIGHT TO YELLOW")
-                            print("SWITCHING A TURNOUT: " + str(distTuple[0].turnout_id))
-                            self.light.setYellow()
-                            self.fix_time_remaining = time_to_reach
-                            print("Fix time remaining: " + str(self.fix_time_remaining))
-                            self.time_of_last_check = datetime.datetime.utcnow()
-                            distTuple[0].switchState()
-                            self.time_of_last_turnout_activation = datetime.datetime.utcnow()
-                            #found fix, ending method
-                            return
+                            if(distTuple[0].turnout_id != 1):
+                                self.switchTurnout(distTuple[0], time_to_reach)
+                                #found fix, ending method
+                                return
+                            elif(distTuple[0].turnout_id == 1):
+                                print("Turnout was 1")
+                                if(distTuple[0].current_state == "straight"):
+                                    print("Turnout 1 is in turned state")
+                                    if(checkTrain.current_block == 3 or otherTrain.current_block == 3):
+                                        print("A train is in block 3")
+                                        if(checkTrain.current_block == 12 or checkTrain.current_block == 13 or otherTrain.current_block == 12 or otherTrain.current_block == 13):
+                                            print("---------------------------------------------------THERE WAS TURNOUT 1 BUG")
+                                        else:
+                                            self.switchTurnout(distTuple[0], time_to_reach)
+                                            #found fix, ending method
+                                            return
+                                    else:
+                                        self.switchTurnout(distTuple[0], time_to_reach)
+                                        #found fix, ending method
+                                        return
+                                else:
+                                    self.switchTurnout(distTuple[0], time_to_reach)
+                                    #found fix, ending method
+                                    return
                 #If here, this means there was no turnout that could be swtiched in time
                 # so see if time to collision is smaller than some margin, if so, slow down back train
                 # or speed up front train
@@ -562,7 +416,8 @@ class TrainLayout:
                         print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
                         
                         self.changeTrainSpeed(otherTrain,change_in_sprog_speed)
-                        return
+                        if try_both == False:
+                            return
                     if(checkTrain.sprog_speed < self.MAX_SPEED and try_both == True):
 
                         print("-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------")
@@ -600,15 +455,30 @@ class TrainLayout:
                         time_to_reach = dist_between_train_and_turnout/abs(checkTrain.speed)
                         #Make sure time to reach is greater than lag time to change turnout
                         if(time_to_reach > self.LAG_TIME):
-                            print("SETTING LIGHT TO YELLOW")
-                            print("SWITCHING A TURNOUT: " + str(distTuple[0].turnout_id))
-                            self.light.setYellow()
-                            self.fix_time_remaining = time_to_reach
-                            print("Fix time remaining: " + str(self.fix_time_remaining))
-                            self.time_of_last_check = datetime.datetime.utcnow()
-                            distTuple[0].switchState()
-                            self.time_of_last_turnout_activation = datetime.datetime.utcnow()
-                            return
+                            if(distTuple[0].turnout_id != 1):
+                                self.switchTurnout(distTuple[0], time_to_reach)
+                                #found fix, ending method
+                                return
+                            elif(distTuple[0].turnout_id == 1):
+                                print("Turnout was 1")
+                                if(distTuple[0].current_state == "straight"):
+                                    print("Turnout 1 is in turned state")
+                                    if(checkTrain.current_block == 3 or otherTrain.current_block == 3):
+                                        print("A train is in block 3")
+                                        if(checkTrain.current_block == 12 or checkTrain.current_block == 13 or otherTrain.current_block == 12 or otherTrain.current_block == 13):
+                                            print("---------------------------------------------------THERE WAS TURNOUT 1 BUG")
+                                        else:
+                                            self.switchTurnout(distTuple[0], time_to_reach)
+                                            #found fix, ending method
+                                            return
+                                    else:
+                                        self.switchTurnout(distTuple[0], time_to_reach)
+                                        #found fix, ending method
+                                        return
+                                else:
+                                    self.switchTurnout(distTuple[0], time_to_reach)
+                                    #found fix, ending method
+                                    return
                 #If here, this means there was no turnout that could be swtiched in time
                 # so see if time to collision is smaller than some margin, if so, slow down back train
                 # or speed up front train
@@ -642,7 +512,8 @@ class TrainLayout:
                         
                         
                         self.changeTrainSpeed(checkTrain,change_in_sprog_speed)
-                        return
+                        if try_both == False:
+                            return
                     if(otherTrain.sprog_speed < self.MAX_SPEED and try_both == True):
 
                         print("-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------")
@@ -680,18 +551,16 @@ class TrainLayout:
                     if turnout.orientation == "clockwise":
                         checkDistance = 40
                         currentDistance = 0
-                        ArrayStraight = self.processBlockForTrainCW(turnout.block, turnout.block.left_block_straight, checkDistance, currentDistance, True, checkTrain.direction)
-                        ArrayTurn = self.processBlockForTrainCW(turnout.block, turnout.block.left_block_turn, checkDistance, currentDistance, True, checkTrain.direction)
+                        ArrayStraight = self.processBlockForTrainCW(turnout.block.left_block_straight, checkDistance, currentDistance, True, checkTrain.direction, turnout.block)
+                        ArrayTurn = self.processBlockForTrainCW(turnout.block.left_block_turn, checkDistance, currentDistance, True, checkTrain.direction, turnout.block)
 
                     elif turnout.orientation == "counter-clockwise":
                         checkDistance = 40
                         currentDistance = 0
-                        ArrayStraight = self.processBlockForTrainCCW(turnout.block, turnout.block.right_block_straight, checkDistance, currentDistance, True, checkTrain.direction)
-                        ArrayTurn = self.processBlockForTrainCCW(turnout.block, turnout.block.right_block_turn, checkDistance, currentDistance, True, checkTrain.direction)
+                        ArrayStraight = self.processBlockForTrainCCW(turnout.block.right_block_straight, checkDistance, currentDistance, True, checkTrain.direction, turnout.block)
+                        ArrayTurn = self.processBlockForTrainCCW(turnout.block.right_block_turn, checkDistance, currentDistance, True, checkTrain.direction, turnout.block)
 
                     if len(ArrayStraight) == 1 and len(ArrayTurn) == 1 and ArrayStraight[0][0].train_id != ArrayTurn[0][0].train_id:
-                        print("Array Straight: " + str(ArrayStraight))
-                        print("ArrayTurn: " + str(ArrayTurn))
                         train1 = ArrayStraight[0][0]
                         train2 = ArrayTurn[0][0]
 
@@ -737,7 +606,8 @@ class TrainLayout:
                                     print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
                                     
                                     self.changeTrainSpeed(train1,change_in_sprog_speed)
-                                    return # Stop looking for collisions, fix is in place
+                                    if try_both == False:
+                                        return # Stop looking for collisions, fix is in place
                                 if(train2.sprog_speed < self.MAX_SPEED and try_both == True):
                                     potential_solution_found = True
                                     #Speed up train2
@@ -803,7 +673,8 @@ class TrainLayout:
                                     print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
                                     
                                     self.changeTrainSpeed(train2,change_in_sprog_speed)
-                                    return # Stop looking for collisions, fix is in place
+                                    if try_both == False:
+                                        return # Stop looking for collisions, fix is in place
                                 if(train1.sprog_speed < self.MAX_SPEED and try_both == True):
                                     potential_solution_found = True
                                     # Speed up train 1
@@ -863,22 +734,19 @@ class TrainLayout:
                 trainInBack = True                                                                                                                                                                                                                                          
 
     def stripOfTurnouts(self, array):
-        print(array)
-        print("STRIPPING ARRAY")
         returnArray = []
         for tuple in array:
             if not isinstance(tuple[0], Turnout):
                 returnArray.append(tuple)
-        print(returnArray)
         return returnArray
     
-    def processBlockForTrainCCW(self, previousBlock, block, checkDist, currentDist, validValue, trainDirection):
-        returnArray = self.checkBlockCCW(previousBlock, block, checkDist, currentDist, validValue, trainDirection)
+    def processBlockForTrainCCW(self, block, checkDist, currentDist, validValue, trainDirection, previousBlock):
+        returnArray = self.checkBlockCCW(block, checkDist, currentDist, validValue, trainDirection, previousBlock)
         returnArray = self.stripOfTurnouts(returnArray)
         return returnArray
     
-    def processBlockForTrainCW(self, previousBlock, block, checkDist, currentDist, validValue, trainDirection):
-        returnArray = self.checkBlockCW(previousBlock, block, checkDist, currentDist, validValue, trainDirection)
+    def processBlockForTrainCW(self, block, checkDist, currentDist, validValue, trainDirection, previousBlock):
+        returnArray = self.checkBlockCW(block, checkDist, currentDist, validValue, trainDirection, previousBlock)
         returnArray = self.stripOfTurnouts(returnArray)
         return returnArray
 
@@ -981,9 +849,8 @@ class TrainLayout:
 
 
         trainArray = []
-        # Train direciton does not matter for beam breaker checks
-        trainArray.extend(self.processBlockForTrainCCW(breaker.block.left_block_straight, breaker.block, self.TRAIN_CHECK_DIST, 0, True, "counter-clockwise"))
-        trainArray.extend(self.processBlockForTrainCW(breaker.block, breaker.block.left_block_straight, self.TRAIN_CHECK_DIST, 0, True, "counter-clockwise"))
+        trainArray.extend(self.processBlockForTrainCCW(breaker.block, self.TRAIN_CHECK_DIST, 0, True, "counter-clockwise", breaker.block.left_block_straight))
+        trainArray.extend(self.processBlockForTrainCW(breaker.block.left_block_straight, self.TRAIN_CHECK_DIST, 0, True, "counter-clockwise", breaker.block))
         print(trainArray)
 
         train_to_update = None
@@ -1003,9 +870,10 @@ class TrainLayout:
             print("Time since turnout: " + str((datetime.datetime.utcnow()-self.time_of_last_turnout_activation).total_seconds()))
             if((datetime.datetime.utcnow()-self.time_of_last_turnout_activation).total_seconds() > self.TURNOUT_TIME_BUFFER):
                 #Try searching with longer distance
+                print("--------------------------------------------------------------------TESTING WITH LONGER DISTANCES!!")
                 trainArray = []
-                trainArray.extend(self.processBlockForTrainCCW(breaker.block.left_block_straight, breaker.block, self.TRAIN_CHECK_DIST_LONGER, 0, True, "counter-clockwise"))
-                trainArray.extend(self.processBlockForTrainCW(breaker.block, breaker.block.left_block_straight, self.TRAIN_CHECK_DIST_LONGER, 0, True, "counter-clockwise"))
+                trainArray.extend(self.processBlockForTrainCCW(breaker.block, self.TRAIN_CHECK_DIST_LONGER, 0, True, "counter-clockwise", breaker.block.left_block_straight))
+                trainArray.extend(self.processBlockForTrainCW(breaker.block.left_block_straight, self.TRAIN_CHECK_DIST_LONGER, 0, True, "counter-clockwise", breaker.block))
                 for trainTuple in trainArray:
                     if train_to_update == None:
                         train_to_update = trainTuple[0]
@@ -1045,7 +913,7 @@ class TrainLayout:
                     print("---------------------------------------------------------------------PAIR DISTANCE IS ZERO--------" + str(train_to_update.last_breaker_hit) + str(breaker.breaker_id))
                 print("Pair Distance: " + str(pair_distance))
                 print("Time: " + str(((time_of_break-train_to_update.time_of_last_hit).total_seconds())))
-                if(train_to_update.last_breaker_hit != breaker.breaker_id and train_to_update.changing_speed == False and pair_distance != 0):# and train_to_update.restart_beam_breaker_hit == False):
+                if(train_to_update.last_breaker_hit != breaker.breaker_id and train_to_update.changing_speed == False and train_to_update.restart_beam_breaker_hit == False and pair_distance != 0):
                     train_to_update.setSpeedForAverage(pair_distance/((time_of_break-train_to_update.time_of_last_hit).total_seconds()))
                     #train.speed = pair_distance/((time_of_break-train.time_of_last_hit).total_seconds())
                     if(train_to_update.direction == "clockwise"):

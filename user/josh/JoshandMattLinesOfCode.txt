@@ -1,0 +1,24 @@
+Josh
+RelayInitializeScript: 11
+CommunicationSendTest: 7
+PinOutputTest: 11
+scriptPowerAndFile: 108
+backupOfArduinoLocation: 1343-302(blank lines/comments)-6(Lucas while loop arduino code)-12(Matt speed for average code)
+
+Total: 1,160
+-----------------------------------------------
+
+Matt:
+turnTrackOnOfficial: 3
+turnTrackOffOfficial: 3
+setGreen: 3
+lightOff: 4
+setRed: 3
+setYellow: 3
+changeDirectionOfficial: 4
+changeSpeedOfficial: 4
+GeLight: 64-21(blank lines/comments)
+lightHandler: 58-18(blank lines/comments)
+backupOfArduinoLoation: 12
+
+Total: 122
