@@ -13,27 +13,28 @@ WHITE = 3
 TIME_BUFFER = 1.0
 
 class lightHandler:
-    def __init__(self):
+    def __init__(self, debug):
 	#sets up the light and initializes to green
         self.color = GREEN
 	self.light = GELight.GELight()
 	self.light.setGreen()
         #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
         self.timeOfLastUpdate = datetime.datetime.utcnow()
-	self.greenCounter = 0	
+	self.greenCounter = 0
+	self.debug = debug	
 
 #sets light to green
 #because of the weird bug that changes the light to magenta or some other random color, it forces it to refresh every 3rd call, regardless of whether or not it's green 
 #"train is good"
     def setGreen(self):
         currentTime = datetime.datetime.utcnow()
-        print("currentTime for light change: " + str(currentTime))
-	print("total seconds from last light change: " + str((currentTime - self.timeOfLastUpdate).total_seconds()))
+        if self.debug: print("currentTime for light change: " + str(currentTime))
+	if self.debug: print("total seconds from last light change: " + str((currentTime - self.timeOfLastUpdate).total_seconds()))
 	self.greenCounter = (self.greenCounter + 1) % 3
 
 	if(self.greenCounter == 2):
 		self.color = GREEN
-		print("Setting light to -------------------------------------------------------------- green to help clear weird bug")
+		if self.debug: print("Setting light to -------------------------------------------------------------- green to help clear weird bug")
 		self.light.setOff()
 		self.light.setGreen()
 		greenCounter = 0
@@ -44,16 +45,16 @@ class lightHandler:
 	    if(currentTime - self.timeOfLastUpdate).total_seconds() > TIME_BUFFER:
                 self.color = GREEN
                 #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
-                print("Setting light to -------------------------------------------------------------- green")
+                if self.debug: print("Setting light to -------------------------------------------------------------- green")
 		self.light.setOff()
                 self.light.setGreen()
 		self.light.setGreen()
 		self.timeOfLastUpdate = datetime.datetime.utcnow()
             else:
-		print("----------------------------------------------------------------- must wait to change light to green!")
+		if self.debug: print("----------------------------------------------------------------- must wait to change light to green!")
 
         else:
-            print("------------------------------------------------------Light is already green!")
+            if self.debug: print("------------------------------------------------------Light is already green!")
            
 
 #sets light to yellow
@@ -62,23 +63,23 @@ class lightHandler:
 #"change is happening to a train"
     def setYellow(self):
         currentTime = datetime.datetime.utcnow()
-        print("currentTime for light change: " + str(currentTime))
-	print("total seconds from last light change: " + str((currentTime - self.timeOfLastUpdate).total_seconds()))
+        if self.debug: print("currentTime for light change: " + str(currentTime))
+	if self.debug: print("total seconds from last light change: " + str((currentTime - self.timeOfLastUpdate).total_seconds()))
         
 	if self.color != YELLOW:
             if(currentTime - self.timeOfLastUpdate).total_seconds() > TIME_BUFFER:
                 self.color = YELLOW
-                print("Setting light to -------------------------------------------------------------- yellow")
+                if self.debug: print("Setting light to -------------------------------------------------------------- yellow")
                 self.light.setOff()
 		self.light.setYellow()
 		#os.system("sudo python /home/pi/teamge/user/Matt/setYellow.py")
                 self.timeOfLastUpdate = datetime.datetime.utcnow()
             else:
-		print("----------------------------------------------------------------- must wait to change light to yellow!")
+		if self.debug: print("----------------------------------------------------------------- must wait to change light to yellow!")
             
 
         else:
-            print("------------------------------------------------------Light is already Yellow!")
+            if self.debug: print("------------------------------------------------------Light is already Yellow!")
 
 #sets light to red
 #used to show that the trains crashed and need to be fixed
@@ -86,42 +87,42 @@ class lightHandler:
 #"trains crashed, fix now"
     def setRed(self):
         currentTime = datetime.datetime.utcnow()
-        print("currentTime for light change: " + str(currentTime))
-	print("total seconds from last light change: " + str((currentTime - self.timeOfLastUpdate).total_seconds()))
+        if self.debug: print("currentTime for light change: " + str(currentTime))
+	if self.debug: print("total seconds from last light change: " + str((currentTime - self.timeOfLastUpdate).total_seconds()))
         
 	if self.color != RED:
             if(currentTime - self.timeOfLastUpdate).total_seconds() > TIME_BUFFER:
                 self.color = RED
-                print("Setting light to -------------------------------------------------------------- red")
+                if self.debug: print("Setting light to -------------------------------------------------------------- red")
                 self.light.setOff()
 		self.light.setRed()
 		#os.system("sudo python /home/pi/teamge/user/Matt/setRed.py")
                 self.timeOfLastUpdate = datetime.datetime.utcnow()
             else:
-		print("----------------------------------------------------------------- must wait to change light to red!")
+		if self.debug: print("----------------------------------------------------------------- must wait to change light to red!")
             
 
         else:
-            print("------------------------------------------------------Light is already Red!")
+            if self.debug: print("------------------------------------------------------Light is already Red!")
  
 #changes light to white
 #used in debugging
     def setWhite(self):
         currentTime = datetime.datetime.utcnow()
-        print("currentTime for light change: " + str(currentTime))
-	print("total seconds from last light change: " + str((currentTime - self.timeOfLastUpdate).total_seconds()))
+        if self.debug: print("currentTime for light change: " + str(currentTime))
+	if self.debug: print("total seconds from last light change: " + str((currentTime - self.timeOfLastUpdate).total_seconds()))
         
 	if self.color != WHITE:
 	    if(currentTime - self.timeOfLastUpdate).total_seconds() > TIME_BUFFER:
                 self.color = WHITE
-                print("Setting light to -------------------------------------------------------------- white")
+                if self.debug: print("Setting light to -------------------------------------------------------------- white")
                 #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
 		self.light.setOff()
                 self.light.setWhite()
 		self.timeOfLastUpdate = datetime.datetime.utcnow()
             else:
-		print("----------------------------------------------------------------- must wait to change light to white!")
+		if self.debug: print("----------------------------------------------------------------- must wait to change light to white!")
 
         else:
-            print("------------------------------------------------------Light is already white!")
+            if self.debug: print("------------------------------------------------------Light is already white!")
             
