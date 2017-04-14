@@ -19,21 +19,21 @@ class GELight:
 
     def setRed(self):
         for i in range(self.strip.numPixels()):
-                self.strip.setPixelColor(i, Color(255, 0, 0))
+                self.strip.setPixelColorRGB(i, 255, 0, 0)
         self.strip.show()
                 #time.sleep(5/1000)
 
 
     def setGreen(self):
             for i in range(self.strip.numPixels()):
-                    self.strip.setPixelColor(i, Color(0, 255, 0))
+                    self.strip.setPixelColorRGB(i, 0, 255, 0)
             self.strip.show()
 
 
     def setYellow(self):
             
             for i in range(self.strip.numPixels()):
-                    self.strip.setPixelColor(i, Color(255, 255, 0))
+                    self.strip.setPixelColorRGB(i, 255, 255, 0)
             self.strip.show()
 
     def setOff(self):
@@ -43,7 +43,7 @@ class GELight:
 
     def setWhite(self):
 	for i in range(self.strip.numPixels()):
-	    self.strip.setPixelColor(i, Color(255, 255, 255))
+	    self.strip.setPixelColorRGB(i, 255, 255, 255)
 	self.strip.show()
 
     def setRainbow(self, wait_ms=20, iterations=5):
