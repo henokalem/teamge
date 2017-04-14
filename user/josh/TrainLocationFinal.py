@@ -279,12 +279,35 @@ class TrainLayout:
         if checkDistance > checkTrain.distance_in_block:
             checkDistance -= checkTrain.distance_in_block
             currentDistance += checkTrain.distance_in_block
-            appendArray = self.checkBlockCW(checkTrain.current_block.left_block_straight, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
-            CWArray.extend(appendArray)
-            if checkTrain.current_block.left_block_turn != None:
-                CWArray.append((checkTrain.current_block.turnout_left, checkTrain.distance_in_block, True))
-                appendArray = self.checkBlockCW(checkTrain.current_block.left_block_turn, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+            if checkTrain.current_block.turnout_left == None:
+                appendArray = self.checkBlockCW(checkTrain.current_block.left_block_straight, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
                 CWArray.extend(appendArray)
+            else:
+                CWArray.append((checkTrain.current_block.turnout_left, checkTrain.distance_in_block, True))
+                if checkTrain.direction == "clockwise":
+                    print("Making a decision on the valid values of future trains")
+                    if checkTrain.current_block.turnout_left.current_state == "straight":
+                        appendArray = self.checkBlockCW(checkTrain.current_block.left_block_straight, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+                        CWArray.extend(appendArray)
+                        appendArray2 = self.checkBlockCW(checkTrain.current_block.left_block_turn, checkDistance, currentDistance, False, checkTrain.direction, checkTrain.current_block)
+                        CWArray.extend(appendArray2)
+                    elif checkTrain.current_block.turnout_left.current_state == "turn":
+                        appendArray = self.checkBlockCW(checkTrain.current_block.left_block_straight, checkDistance, currentDistance, False, checkTrain.direction, checkTrain.current_block)
+                        CWArray.extend(appendArray)
+                        appendArray2 = self.checkBlockCW(checkTrain.current_block.left_block_turn, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+                        CWArray.extend(appendArray2)
+                else:
+                    appendArray = self.checkBlockCW(checkTrain.current_block.left_block_straight, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+                    CWArray.extend(appendArray)
+                    appendArray2 = self.checkBlockCW(checkTrain.current_block.left_block_turn, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+                    CWArray.extend(appendArray2)
+                
+##            appendArray = self.checkBlockCW(checkTrain.current_block.left_block_straight, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+##            CWArray.extend(appendArray)
+##            if checkTrain.current_block.left_block_turn != None:
+##                CWArray.append((checkTrain.current_block.turnout_left, checkTrain.distance_in_block, True))
+##                appendArray = self.checkBlockCW(checkTrain.current_block.left_block_turn, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
+##                CWArray.extend(appendArray)
         print(CWArray)
 
 

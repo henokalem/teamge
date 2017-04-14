@@ -8,6 +8,7 @@ import GELight
 GREEN = 0
 YELLOW = 1
 RED = 2
+WHITE = 3
 TIME_BUFFER = 1.0
 
 class lightHandler:
@@ -17,7 +18,7 @@ class lightHandler:
 	self.light.setGreen()
         #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
         self.timeOfLastUpdate = datetime.datetime.utcnow()
-
+ 
     def setGreen(self):
         currentTime = datetime.datetime.utcnow()
         print("currentTime for light change: " + str(currentTime))
@@ -37,7 +38,7 @@ class lightHandler:
 
         else:
             print("------------------------------------------------------Light is already green!")
-            
+           
 
     def setYellow(self):
         currentTime = datetime.datetime.utcnow()
@@ -79,4 +80,23 @@ class lightHandler:
 
         else:
             print("------------------------------------------------------Light is already Red!")
+ 
+    def setWhite(self):
+        currentTime = datetime.datetime.utcnow()
+        print("currentTime for light change: " + str(currentTime))
+	print("total seconds from last light change: " + str((currentTime - self.timeOfLastUpdate).total_seconds()))
+        
+	if self.color != WHITE:
+	    if(currentTime - self.timeOfLastUpdate).total_seconds() > TIME_BUFFER:
+                self.color = WHITE
+                print("Setting light to -------------------------------------------------------------- white")
+                #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
+		self.light.setOff()
+                self.light.setWhite()
+		self.timeOfLastUpdate = datetime.datetime.utcnow()
+            else:
+		print("----------------------------------------------------------------- must wait to change light to white!")
+
+        else:
+            print("------------------------------------------------------Light is already white!")
             

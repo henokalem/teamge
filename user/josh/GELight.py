@@ -41,6 +41,11 @@ class GELight:
             self.strip.setPixelColor(i, Color(0,0,0))
         self.strip.show()
 
+    def setWhite(self):
+	for i in range(self.strip.numPixels()):
+	    self.strip.setPixelColor(i, Color(255, 255, 255))
+	self.strip.show()
+
     def setRainbow(self, wait_ms=20, iterations=5):
 	"""Draw rainbow that uniformly distributes itself across all pixels."""
 	for j in range(256*iterations):
