@@ -7,7 +7,7 @@ import os
 import csv
 import sys
 import lightHandler
-
+import random
 
 #Class for beam breakers
 class BeamBreaker:
@@ -96,6 +96,10 @@ class TrainLayout:
             print("There are no trains to keep track of!")
             sys.exit()
 
+        # Set debug value for all trains
+        for train in self.trains:
+            train.setDebug(self.debug)
+
 
         # Set up the turnouts with the appropriate pins, orientation, and wanted started orientation
         self.turnouts.append(Turnout(1,20,21, "counter-clockwise","straight"))
@@ -108,7 +112,9 @@ class TrainLayout:
         time.sleep(1)
         self.turnouts.append(Turnout(5,6,13, "counter-clockwise","straight"))
 
-        
+        # Set the debug value for the turnouts
+        for turnout in self.turnouts:
+            turnout.setDebug(self.debug)
 
         #Set up the initial blocks
         #                            LBS  LBT  TL   RBS  RBT  TR
@@ -217,7 +223,21 @@ class TrainLayout:
                 self.fix_time_remaining = 0
 
             if self.trains[0].initialized != False and self.trains[1].initialized != False and self.fix_time_remaining <= 0:
+                self.randomSwitch()
                 self.checkForCollisions()
+
+    # Method to randomly switch a track (very small chance to occur)
+    def randomSwitch(self):
+        # Make a random switch a 1 in X chance
+        X = 100
+        if(random.randint(0,X) == X):
+            turnout_to_switch = random.randint(1,5)
+            for turnout in self.turnouts:
+                if(turnout_to_switch == turnout.turnout_id):
+                    self.switchTurnout(turnout,0)
+                    print("")
+                    print("PERFORMING A RANDOM TURNOUT SWITCH")
+                    print("")
 
     # Method to check for collisions between the trains
     def checkForCollisions(self):
@@ -268,7 +288,7 @@ class TrainLayout:
                     CCWArray.extend(appendArray)
                     appendArray2 = self.checkBlockCCW(checkTrain.current_block.right_block_turn, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
                     CCWArray.extend(appendArray2)
-        print(CCWArray)
+        if self.debug: print(CCWArray)
 
 
         # Check in the clockwise direction
@@ -308,7 +328,7 @@ class TrainLayout:
                     CWArray.extend(appendArray)
                     appendArray2 = self.checkBlockCW(checkTrain.current_block.left_block_turn, checkDistance, currentDistance, True, checkTrain.direction, checkTrain.current_block)
                     CWArray.extend(appendArray2)
-        print(CWArray)
+        if self.debug: print(CWArray)
 
 
         # Check for collision conditions, with array directions based on directions of trains
@@ -320,7 +340,7 @@ class TrainLayout:
             self.sameDirectionCollisionChecks(CWArray, CCWArray, checkTrain)
         else:
             # Currently no method for dealing with checking collisions when trains are going in the opposite directions
-            print("Checking different directions")
+            if self.debug: print("Checking different directions")
 
         if(self.fix_time_remaining == 0):
             self.light.setGreen()
@@ -429,9 +449,10 @@ class TrainLayout:
     # Method to switch a turnout
     # also sets the light to yellow and sets the fix time remaining for the collision fix
     def switchTurnout(self, turnout, time_to_reach):
-        if self.debug: print("SETTING LIGHT TO YELLOW")
+        if self.debug:
+            if time_to_reach != 0: print("SETTING LIGHT TO YELLOW")
         if self.debug: print("SWITCHING A TURNOUT: " + str(turnout.turnout_id))
-        self.light.setYellow()
+        if time_to_reach != 0: self.light.setYellow() # Only set light to yellow if time to reach is not zero (zero means it is a random track switch)
         self.fix_time_remaining = time_to_reach
         if self.debug: print("Fix time remaining: " + str(self.fix_time_remaining))
         self.time_of_last_check = datetime.datetime.utcnow()
@@ -511,7 +532,7 @@ class TrainLayout:
                         if self.debug: print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
                         if self.debug: print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
                         
-                        self.changeTrainSpeed(otherTrain,change_in_sprog_speed)
+                        self.changeTrainSpeed(otherTrain,change_in_sprog_speed, True)
                         if try_both == False:
                             return
                     if(checkTrain.sprog_speed < self.MAX_SPEED and try_both == True):
@@ -536,7 +557,7 @@ class TrainLayout:
                         if self.debug: print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
                         if self.debug: print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
                         
-                        self.changeTrainSpeed(checkTrain,change_in_sprog_speed)
+                        self.changeTrainSpeed(checkTrain,change_in_sprog_speed, True)
                         return
                     
 
@@ -587,7 +608,7 @@ class TrainLayout:
                         if self.debug: print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
                         
                         
-                        self.changeTrainSpeed(checkTrain,change_in_sprog_speed)
+                        self.changeTrainSpeed(checkTrain,change_in_sprog_speed, True)
                         if try_both == False:
                             return
                     if(otherTrain.sprog_speed < self.MAX_SPEED and try_both == True):
@@ -612,7 +633,7 @@ class TrainLayout:
                         if self.debug: print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
                         if self.debug: print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
                         
-                        self.changeTrainSpeed(otherTrain,0.2)
+                        self.changeTrainSpeed(otherTrain,0.2, True)
                         return
 
 
@@ -689,7 +710,10 @@ class TrainLayout:
                                     if self.debug: print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
                                     if self.debug: print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
                                     
-                                    self.changeTrainSpeed(train1,change_in_sprog_speed)
+                                    self.changeTrainSpeed(train1,change_in_sprog_speed, False)
+                                    # Override the fix time, since want to wait for train to pass turnout, not for train to finish changing speed
+                                    # Use the larger time value to ensure at least one train is past the turnout before collisions are checked again
+                                    self.setFixTime(train1TimeToTurnout)
                                     if try_both == False:
                                         return # Stop looking for collisions, fix is in place
                                 # potentially speed up the second train if could not speed up the first train or speed up from first train isn't enough
@@ -705,7 +729,6 @@ class TrainLayout:
                                     if self.debug: print("Current train sprog speed: " + str(curr_test_sprog_speed))
                                     speed_change_good = False
                                     new_speed_min = train2Dist / (train1TimeToTurnout - self.TURNOUT_COLLISION_TIME_BUFFER)
-                                    # DELETE ME: This check is 0.85 and not 0.9 because of possible floating point error, still looking into
                                     while(curr_test_sprog_speed < self.MAX_SPEED and speed_change_good == False):
                                         curr_test_sprog_speed += 0.2
                                         if self.debug: print("Current testing sprog speed: " + str(curr_test_sprog_speed))
@@ -717,15 +740,21 @@ class TrainLayout:
                                     if self.debug: print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
                                     if self.debug: print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
                                     
-                                    self.changeTrainSpeed(train2,change_in_sprog_speed)
+                                    self.changeTrainSpeed(train2,change_in_sprog_speed, False)
+                                    # Override the fix time, since want to wait for train to pass turnout, not for train to finish changing speed
+                                    # Use the larger time value to ensure at least one train is past the turnout before collisions are checked again
+                                    self.setFixTime(train1TimeToTurnout)
                                     return # Stop looking for collisions, fix is in place
                                 if(potential_solution_found == False):
                                     #This option means that train 1 cannot slow down, and train 2 cannot speed up
                                     # So, then speed up train 2 by 0.6
                                     # and slow down train 3 by 0.6
                                     if self.debug: print("--------------------------------------------------------------CASE 3 SLOW 2 SPEED 1!----------------------")
-                                    self.changeTrainSpeed(train1,0.6)
-                                    self.changeTrainSpeed(train2,-0.6)
+                                    self.changeTrainSpeed(train1,0.6, False)
+                                    self.changeTrainSpeed(train2,-0.6, False)
+                                    # Override the fix time, since want to wait for train to pass turnout, not for train to finish changing speed
+                                    # Use the larger time value to ensure at least one train is past the turnout before collisions are checked again
+                                    self.setFixTime(train1TimeToTurnout)
                                     return # Stop looking for collisions, fix is in place
                             elif(train2TimeToTurnout > train1TimeToTurnout):
                                 #Train 2 will reach the turnout second, so first try to slow that down.
@@ -757,7 +786,10 @@ class TrainLayout:
                                     if self.debug: print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
                                     if self.debug: print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
                                     
-                                    self.changeTrainSpeed(train2,change_in_sprog_speed)
+                                    self.changeTrainSpeed(train2,change_in_sprog_speed, False)
+                                    # Override the fix time, since want to wait for train to pass turnout, not for train to finish changing speed
+                                    # Use the larger time value to ensure at least one train is past the turnout before collisions are checked again
+                                    self.setFixTime(train2TimeToTurnout)
                                     if try_both == False:
                                         return # Stop looking for collisions, fix is in place
                                 # possibly speed up train 1 if could not slow down train 2 or slowing down train 2 is not enough
@@ -775,17 +807,19 @@ class TrainLayout:
                                     new_speed_min = train1Dist / (train2TimeToTurnout - self.TURNOUT_COLLISION_TIME_BUFFER)
                                     while(curr_test_sprog_speed < self.MAX_SPEED and speed_change_good == False):
                                         curr_test_sprog_speed += 0.2
-                                        print("Current testing sprog speed: " + str(curr_test_sprog_speed))
+                                        if self.debug: print("Current testing sprog speed: " + str(curr_test_sprog_speed))
                                         new_approx_speed = speed_steps[int(round(curr_test_sprog_speed*10))]
-                                        print("New approximate speed: " + str(new_approx_speed))
+                                        if self.debug: print("New approximate speed: " + str(new_approx_speed))
                                         if(new_approx_speed > new_speed_min):
                                             speed_change_good = True
                                     change_in_sprog_speed = curr_test_sprog_speed - train1.sprog_speed
                                     if self.debug: print("Calculated change in sprog speed: " + str(change_in_sprog_speed))
                                     if self.debug: print("---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------")
 
-                                    #elf.light.setGreen()
-                                    self.changeTrainSpeed(train1,change_in_sprog_speed)
+                                    self.changeTrainSpeed(train1,change_in_sprog_speed, False)
+                                    # Override the fix time, since want to wait for train to pass turnout, not for train to finish changing speed
+                                    # Use the larger time value to ensure at least one train is past the turnout before collisions are checked again
+                                    self.setFixTime(train2TimeToTurnout)
                                     return # Stop looking for collisions, fix is in place
                                 # if all else fails, "switch" the speeds
                                 if(potential_solution_found == False):
@@ -793,14 +827,21 @@ class TrainLayout:
                                     # So, then speed up train 2 by 0.6
                                     # and slow down train 1 by 0.6
                                     if self.debug: print("--------------------------------------------------------------CASE 3 SLOW 1 SPEED 2!----------------------")
-                                    self.changeTrainSpeed(train1,-0.6)
-                                    self.changeTrainSpeed(train2,0.6)
+                                    self.changeTrainSpeed(train1,-0.6, False)
+                                    self.changeTrainSpeed(train2,0.6, False)
+                                    # Override the fix time, since want to wait for train to pass turnout, not for train to finish changing speed
+                                    # Use the larger time value to ensure at least one train is past the turnout before collisions are checked again
+                                    self.setFixTime(train2TimeToTurnout)
                                     #self.light.setGreen()
                                     return # Stop looking for collisions, fix is in place
 
                         
                     
-
+    # Method to set the fix time
+    def setFixTime(self, time):
+        self.fix_time_remaining = time
+        if self.debug: print("Calculated fix time: " + str(self.fix_time_remaining))
+        self.time_of_last_check = datetime.datetime.utcnow()
 
 
     # Method to check for collisions when trains are not going in the same direction
@@ -844,16 +885,16 @@ class TrainLayout:
 
     # Function to change the speed of a train, including updating the train
     #  before changing speed
-    def changeTrainSpeed(self, train, sprog_speed_change):
+    # Only update fix time if update_fix_time is True
+    def changeTrainSpeed(self, train, sprog_speed_change, update_fix_time):
         new_speed = train.sprog_speed + sprog_speed_change
         os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(train.train_id) + " " + str(new_speed))
         if self.debug: print("Changing the speed of " + str(train.train_id) + " to " + str(new_speed) + " from " + str(train.sprog_speed))
         train.updateTrain(datetime.datetime.utcnow())
         change_time = train.setNewSPROGSpeed(new_speed)
         self.light.setYellow()
-        self.fix_time_remaining = change_time + self.FIX_TIME_BUFFER
-        if self.debug: print("Calculated fix time: " + str(self.fix_time_remaining))
-        self.time_of_last_check = datetime.datetime.utcnow()
+        if(update_fix_time == True):
+            self.setFixTime(change_time + self.FIX_TIME_BUFFER)
         
         
     # Function to handle when a beam breaker is activated
@@ -962,7 +1003,7 @@ class TrainLayout:
                         if trainTuple[1] < train_distance:
                             train_to_update = trainTuple[0]
                             train_distance = trainTuple[1]
-                print(trainArray)
+                if self.debug: print(trainArray)
 
                 if train_to_update == None:
                     # This should never be hit, or there is a problem, no train was "close enough" (using the longer distance) to set breaker off
@@ -1122,7 +1163,7 @@ class Train:
         self.initialized = False
         self.last_update_time = None
         self.sprog_speed = None
-        self.debug = True
+        self.debug = False # Default is False
 
         #Variables and constants for when slowing down and speeding up
         self.CHANGE_RATE = 8
@@ -1143,7 +1184,11 @@ class Train:
         self.sprog_speed_steps_array_3 = [0,.4817,6.4,9.81,12.42,13.99,14.7,15.99,16.78,17.355,17.75]
         self.sprog_speed_steps_array_4 = [0,1,3.1919,4.2174,4.9541,5.3739,5.6252,5.8399,5.9947,6.0793,6.3020]
         self.sprog_speed_steps_array_2 = [0,.5555,5.555,9.014,11.237,12.677,13.602,14.316,14.593,15.084,15.169]
-        self.sprog_speed_steps_array_5 = [0,.3333,2.746,5.811,8.405,10.210,11.247,12.123,12.845,13.311,13.674]
+        self.sprog_speed_steps_array_5 = [0,.3333,2.746,5.811,8.605,10.210,11.247,12.123,12.845,13.311,13.674]
+
+    # Method to set the debug value of the train
+    def setDebug(self, debug):
+        self.debug = debug
 
     # A method to update the train, input of the train of update
     def updateTrain(self, time_of_update):
@@ -1362,7 +1407,7 @@ class Turnout:
         self.orientation = orientation
         self.block = None
         self.distance_in_block = None
-        self.debug = True
+        self.debug = False # Default is False
 
         # Send signal to make physical turnout to initial state
         if(starting_state == "straight"):
@@ -1375,6 +1420,10 @@ class Turnout:
 
     def __repr__(self):
         return "Turnout: " + str(self.turnout_id)
+
+    # Method to set the debug value for the turnout
+    def setDebug(self, debug):
+        self.debug = debug
 
     # Put the turnout in the straight state
     def activateStraight(self):
