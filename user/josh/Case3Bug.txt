@@ -1,0 +1,1121 @@
+Activated: 2
+Elapsed update time: 0.450639
+Updating train as normal
+Train : 2 Block: 1 Location: 0.227887716806 Speed: 9.61309268306 Sprog Speed: 0.3
+Elapsed update time: 0.450538
+Updating train as normal
+Train : 5 Block: 12 Location: 4.50228604969 Speed: 10.0552460931 Sprog Speed: 0.4
+Checking for collision cases
+Making a decision on the valid values of future trains
+Block: 2, Previous Block: 1
+Block: 8, Previous Block: 1
+[(Turnout: 5, 12.647112283194351, True)]
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 5, Previous Block: 6
+Block: 13, Previous Block: 7
+Block: 12, Previous Block: 13
+Block: 15, Previous Block: 12
+Block: 14, Previous Block: 15
+Block: 11, Previous Block: 12
+Block: 10, Previous Block: 11
+[(Turnout: 4, 4.852887716805649, True), (Train: 5, 23.663101667117864, True), (Turnout: 2, 28.165387716805647, True)]
+Checking same direction counter-clockwise
+Front: False Back: True
+currentTime for light change: 2017-04-19 15:35:39.128042
+total seconds from last light change: 0.446018
+------------------------------------------------------Light is already green!
+Block: 1, Previous Block: 7
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 13, Previous Block: 7
+[(Train: 2, 0.22788771680564857, True)]
+Checking train: 2
+Inside first check
+Train block: 1 Breaker Block: 1
+Distance: 0.227887716806
+Updating Train!
+Pair Distance: 27.0625
+Time: 2.838737
+Speed: 9.59866209785
+ 
+
+Activated: 1
+Elapsed update time: 0.130566
+Updating train as normal
+Train : 2 Block: 1 Location: 1.25325891547 Speed: 9.59866209785 Sprog Speed: 0.3
+Elapsed update time: 0.130408
+Updating train as normal
+Train : 5 Block: 13 Location: 0.313570582199 Speed: 10.0552460931 Sprog Speed: 0.4
+Checking for collision cases
+Making a decision on the valid values of future trains
+Block: 2, Previous Block: 1
+Block: 8, Previous Block: 1
+[(Turnout: 5, 11.621741084532434, True)]
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 5, Previous Block: 6
+Block: 13, Previous Block: 7
+Block: 12, Previous Block: 13
+Block: 15, Previous Block: 12
+Block: 14, Previous Block: 15
+Block: 11, Previous Block: 12
+Block: 10, Previous Block: 11
+[(Turnout: 4, 5.878258915467565, True), (Train: 5, 23.37718833326865, True), (Turnout: 2, 29.190758915467566, True)]
+Checking same direction counter-clockwise
+Front: False Back: True
+currentTime for light change: 2017-04-19 15:35:39.258523
+total seconds from last light change: 0.576499
+------------------------------------------------------Light is already green!
+Block: 13, Previous Block: 12
+Block: 12, Previous Block: 13
+Block: 15, Previous Block: 12
+Block: 11, Previous Block: 12
+[(Train: 5, 0.3135705821989152, True)]
+Checking train: 5
+Inside first check
+Train block: 13 Breaker Block: 13
+Distance: 0.313570582199
+Updating Train!
+Pair Distance: 15.625
+Time: 1.584866
+Speed: 9.91850059744
+ 
+Elapsed update time: 1.003018
+Updating train as normal
+Train : 2 Block: 1 Location: 10.8808897755 Speed: 9.59866209785 Sprog Speed: 0.3
+Elapsed update time: 1.003429
+Updating train as normal
+Train : 5 Block: 13 Location: 9.95251113599 Speed: 9.91850059744 Sprog Speed: 0.4
+Checking for collision cases
+Making a decision on the valid values of future trains
+Block: 2, Previous Block: 1
+Block: 8, Previous Block: 1
+[(Turnout: 5, 1.9941102244735678, True)]
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 5, Previous Block: 6
+Block: 13, Previous Block: 7
+Block: 12, Previous Block: 13
+Block: 15, Previous Block: 12
+Block: 11, Previous Block: 12
+[(Turnout: 4, 15.505889775526432, True), (Train: 5, 23.365878639534266, True), (Turnout: 2, 38.818389775526434, True)]
+Checking same direction counter-clockwise
+Front: False Back: True
+currentTime for light change: 2017-04-19 15:35:40.262508
+total seconds from last light change: 1.580484
+Setting light to -------------------------------------------------------------- green to help clear weird bug
+Elapsed update time: 1.009845
+Updating train as normal
+Train : 2 Block: 2 Location: 7.69905070173 Speed: 9.59866209785 Sprog Speed: 0.3
+Elapsed update time: 1.009929
+Updating train as normal
+Train : 5 Block: 7 Location: 2.15699252587 Speed: 9.91850059744 Sprog Speed: 0.4
+Checking for collision cases
+Block: 3, Previous Block: 2
+[]
+Block: 1, Previous Block: 2
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 13, Previous Block: 7
+[(Turnout: 5, 7.699050701727309, True), (Train: 5, 23.042058175859587, True), (Turnout: 4, 25.19905070172731, True)]
+Checking same direction counter-clockwise
+Front: False Back: True
+SETTING LIGHT TO YELLOW
+SWITCHING A TURNOUT: 5
+currentTime for light change: 2017-04-19 15:35:41.271907
+total seconds from last light change: 1.002984
+Setting light to -------------------------------------------------------------- yellow
+Fix time remaining: 1.54690795483
+Putting turnout in 'turn' state
+ACTIVATING TURNOUT --------------------------------------------------------------------TURNOUT----------------
+
+Activated: 2
+Elapsed update time: 0.491451
+Updating train as normal
+Train : 2 Block: 2 Location: 12.4163227884 Speed: 9.59866209785 Sprog Speed: 0.3
+Elapsed update time: 0.491202
+Updating train as normal
+Train : 5 Block: 1 Location: 2.40397985633 Speed: 9.91850059744 Sprog Speed: 0.4
+Block: 1, Previous Block: 7
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 13, Previous Block: 7
+[(Train: 5, 2.403979856333181, True)]
+Checking train: 5
+Inside first check
+Train block: 1 Breaker Block: 1
+Distance: 2.40397985633
+Updating Train!
+Pair Distance: 22.4375
+Time: 2.504309
+Speed: 9.9583465719
+ 
+Elapsed update time: 1.002014
+Updating train as normal
+Train : 2 Block: 2 Location: 22.0343165917 Speed: 9.59866209785 Sprog Speed: 0.3
+Elapsed update time: 1.002376
+Updating train as normal
+Train : 5 Block: 1 Location: 9.98200760336 Speed: 9.9583465719 Sprog Speed: 0.4
+Elapsed update time: 1.001595
+Updating train as normal
+Train : 2 Block: 2 Location: 31.6482885556 Speed: 9.59866209785 Sprog Speed: 0.3
+Elapsed update time: 1.001597
+Updating train as normal
+Train : 5 Block: 8 Location: 7.08125765473 Speed: 9.9583465719 Sprog Speed: 0.4
+Checking for collision cases
+Block: 3, Previous Block: 2
+Block: 4, Previous Block: 3
+Block: 14, Previous Block: 3
+[(Turnout: 1, 34.78921144441715, True)]
+Block: 1, Previous Block: 2
+[(Turnout: 5, 31.64828855558285, True)]
+Checking same direction counter-clockwise
+Front: False Back: False
+currentTime for light change: 2017-04-19 15:35:43.766058
+total seconds from last light change: 2.487524
+Setting light to -------------------------------------------------------------- green
+
+Activated: 9
+Elapsed update time: 0.804556
+Updating train as normal
+Train : 2 Block: 3 Location: 0.433449738379 Speed: 9.59866209785 Sprog Speed: 0.3
+Elapsed update time: 0.804439
+Updating train as normal
+Train : 5 Block: 8 Location: 15.0921400127 Speed: 9.9583465719 Sprog Speed: 0.4
+Checking for collision cases
+Making a decision on the valid values of future trains
+Block: 4, Previous Block: 3
+Block: 5, Previous Block: 4
+Block: 14, Previous Block: 3
+Block: 15, Previous Block: 14
+[(Turnout: 1, 27.066550261621302, True)]
+Block: 2, Previous Block: 3
+Block: 1, Previous Block: 2
+[(Turnout: 5, 39.3709497383787, True)]
+Checking same direction counter-clockwise
+Front: False Back: False
+currentTime for light change: 2017-04-19 15:35:44.570630
+total seconds from last light change: 0.797457
+------------------------------------------------------Light is already green!
+Block: 3, Previous Block: 2
+Block: 2, Previous Block: 3
+[(Train: 2, 0.43344973837869816, True)]
+Checking train: 2
+Inside first check
+Train block: 3 Breaker Block: 3
+Distance: 0.433449738379
+Updating Train!
+Pair Distance: 51.8125
+Time: 5.442921
+Speed: 9.5990055084
+ 
+Elapsed update time: 1.002671
+Updating train as normal
+Train : 2 Block: 3 Location: 9.62464445212 Speed: 9.5990055084 Sprog Speed: 0.3
+Elapsed update time: 1.002764
+Updating train as normal
+Train : 5 Block: 8 Location: 25.0780114545 Speed: 9.9583465719 Sprog Speed: 0.4
+Checking for collision cases
+Making a decision on the valid values of future trains
+Block: 4, Previous Block: 3
+Block: 5, Previous Block: 4
+Block: 14, Previous Block: 3
+Block: 15, Previous Block: 14
+Block: 12, Previous Block: 15
+Block: 13, Previous Block: 12
+[(Turnout: 1, 17.87535554788279, True), (Turnout: 2, 34.31285554788279, True)]
+Block: 2, Previous Block: 3
+[]
+Checking same direction counter-clockwise
+Front: False Back: False
+Checking for possible turnout collision
+Block: 15, Previous Block: 12
+Block: 14, Previous Block: 15
+Block: 3, Previous Block: 14
+Block: 2, Previous Block: 3
+Block: 11, Previous Block: 12
+Block: 10, Previous Block: 11
+Block: 9, Previous Block: 10
+Block: 8, Previous Block: 9
+Block: 17, Previous Block: 10
+Block: 16, Previous Block: 17
+Array Straight for turnout: [(Train: 2, 34.31285554788279, True)]
+Array Turn for turnout: [(Train: 5, 36.8594885454912, True)]
+Inside of check for turnout collision
+Case: Train collision possible at a turnout
+-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------
+Train 1 speeding up?
+Speed steps: [0, 0.5555, 5.555, 9.014, 11.237, 12.677, 13.602, 14.316, 14.593, 15.084, 15.169]
+Current train sprog speed: 0.3
+Current testing sprog speed: 0.5
+New approximate speed: 12.677
+Current testing sprog speed: 0.7
+New approximate speed: 14.316
+Current testing sprog speed: 0.9
+New approximate speed: 15.084
+Calculated change in sprog speed: 0.6
+---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------
+Changing the speed of 2 to 0.9 from 0.3
+Elapsed update time: 0.118169
+Updating train as normal
+SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------
+New sprog speed: 0.9
+0.9
+0
+9.0
+9
+Calculated new speed: 15.084
+Speed diff: 5.4849944916
+currentTime for light change: 2017-04-19 15:35:45.690881
+total seconds from last light change: 1.917708
+Setting light to -------------------------------------------------------------- yellow
+Calculated fix time: 2.28562431145
+
+Activated: 8
+Elapsed update time: 0.988808
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.988808
+Remaining lag time: 0.511192
+Last update time: 2017-04-19 15:35:46.679307
+Remaining change time: 0.685624311449
+Train : 2 Block: 3 Location: 20.2505227728 Speed: 9.5990055084 Sprog Speed: 0.9
+Elapsed update time: 1.10686
+Updating train as normal
+Train : 5 Block: 8 Location: 36.1005069411 Speed: 9.9583465719 Sprog Speed: 0.4
+Block: 9, Previous Block: 8
+Block: 10, Previous Block: 9
+Block: 8, Previous Block: 9
+[(Train: 5, 2.7744930589176136, True)]
+Checking train: 5
+Inside first check
+Train block: 8 Breaker Block: 9
+Distance: 2.77449305892
+Updating Train!
+Pair Distance: 51.75
+Time: 4.917661
+Speed: 9.98380199596
+ 
+Elapsed update time: 1.002001
+Updating train as changing speed
+ABOVE LAG TIME BELOW FINAL
+Old speed: 9.5990055084
+New derived speed: 13.5254775084
+Remaining lag time: 0
+Last update time: 2017-04-19 15:35:47.681308
+Remaining change time: 0.194815311449
+Train : 2 Block: 14 Location: 3.33230978914 Speed: 13.5254775084 Sprog Speed: 0.9
+Elapsed update time: 1.002574
+Updating train as normal
+Train : 5 Block: 10 Location: 4.8845003023 Speed: 9.98380199596 Sprog Speed: 0.4
+
+Activated: 5
+Elapsed update time: 0.103651
+Updating train as changing speed
+ABOVE LAG TIME BELOW FINAL
+Old speed: 13.5254775084
+New derived speed: 14.3546855084
+Remaining lag time: 0
+Last update time: 2017-04-19 15:35:47.784959
+Remaining change time: 0.0911643114495
+Train : 2 Block: 14 Location: 4.77721317757 Speed: 14.3546855084 Sprog Speed: 0.9
+Elapsed update time: 0.103488
+Updating train as normal
+Train : 5 Block: 10 Location: 5.91770400326 Speed: 9.98380199596 Sprog Speed: 0.4
+Block: 15, Previous Block: 14
+Block: 14, Previous Block: 15
+[(Train: 2, 1.5352868224277767, True)]
+Checking train: 2
+Inside first check
+Train block: 14 Breaker Block: 15
+Distance: 1.53528682243
+Updating Train!
+Pair Distance: 33.8125
+Time: 3.215162
+ 
+
+Activated: 4
+Elapsed update time: 0.524369
+Updating train as changing speed
+ABOVE FINAL
+Remaining lag time: 0
+Last update time: 2017-04-19 15:35:48.309190
+Remaining change time: 0
+Train : 2 Block: 15 Location: 7.87633826927 Speed: 15.084 Sprog Speed: 0.9
+Elapsed update time: 0.524244
+Updating train as normal
+Train : 5 Block: 11 Location: 0.589152296829 Speed: 9.98380199596 Sprog Speed: 0.4
+Checking for collision cases
+Block: 12, Previous Block: 15
+Block: 13, Previous Block: 12
+Block: 7, Previous Block: 13
+Block: 1, Previous Block: 7
+[(Turnout: 2, 2.248661730728223, True), (Turnout: 4, 25.561161730728223, True)]
+Block: 14, Previous Block: 15
+Block: 3, Previous Block: 14
+[(Turnout: 1, 14.188838269271777, True)]
+Checking same direction counter-clockwise
+Front: False Back: False
+Checking for possible turnout collision
+Block: 15, Previous Block: 12
+Block: 14, Previous Block: 15
+Block: 3, Previous Block: 14
+Block: 2, Previous Block: 3
+Block: 11, Previous Block: 12
+Block: 10, Previous Block: 11
+Block: 9, Previous Block: 10
+Block: 8, Previous Block: 9
+Block: 17, Previous Block: 10
+Block: 16, Previous Block: 17
+Array Straight for turnout: [(Train: 2, 2.248661730728223, True)]
+Array Turn for turnout: [(Train: 5, 6.785847703171045, True)]
+Inside of check for turnout collision
+Case: Train collision possible at a turnout
+--------------------------------------------------------------CASE 3 SLOW 1 SPEED 2!----------------------
+Changing the speed of 2 to 0.3 from 0.9
+Elapsed update time: 0.093512
+Updating train as normal
+SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------
+New sprog speed: 0.3
+0.3
+0
+3.0
+3
+Calculated new speed: 9.014
+Speed diff: 6.07
+currentTime for light change: 2017-04-19 15:35:48.403073
+total seconds from last light change: 2.707641
+------------------------------------------------------Light is already Yellow!
+Calculated fix time: 2.35875
+Changing the speed of 5 to 1.0 from 0.4
+Elapsed update time: 0.182415
+Updating train as normal
+SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------
+New sprog speed: 1.0
+1.0
+1
+10.0
+10
+Calculated new speed: 13.674
+Speed diff: 3.69019800404
+currentTime for light change: 2017-04-19 15:35:48.492228
+total seconds from last light change: 2.796796
+------------------------------------------------------Light is already Yellow!
+Calculated fix time: 2.0612747505
+Block: 11, Previous Block: 10
+Block: 10, Previous Block: 11
+[(Train: 5, 2.410347537922377, True)]
+Checking train: 5
+Inside first check
+Train block: 11 Breaker Block: 11
+Distance: 2.41034753792
+Updating Train!
+Pair Distance: 15.6875
+Time: 1.629913
+ 
+
+Activated: 1
+Elapsed update time: 0.500647
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.500647
+Remaining lag time: 0.999353
+Last update time: 2017-04-19 15:35:48.903349
+Remaining change time: 0.75875
+Train : 2 Block: 13 Location: 1.21363262527 Speed: 15.084 Sprog Speed: 0.3
+Elapsed update time: 0.59453
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.59453
+Remaining lag time: 0.90547
+Last update time: 2017-04-19 15:35:48.903586
+Remaining change time: 0.461274750505
+Train : 5 Block: 11 Location: 5.93566980066 Speed: 9.98380199596 Sprog Speed: 1.0
+Block: 13, Previous Block: 12
+Block: 12, Previous Block: 13
+Block: 15, Previous Block: 12
+Block: 11, Previous Block: 12
+[(Train: 2, 1.2136326252717744, True)]
+Checking train: 2
+Inside first check
+Train block: 13 Breaker Block: 13
+Distance: 1.21363262527
+Updating Train!
+Pair Distance: 15.625
+Time: 1.118389
+ 
+('The same train activated the beam break! ID: ', 1)
+Elapsed update time: 1.656747
+Updating train as changing speed
+ABOVE LAG TIME BELOW FINAL
+Old speed: 15.084
+New derived speed: 9.824848
+Remaining lag time: 0
+Last update time: 2017-04-19 15:35:50.559957
+Remaining change time: 0.101356
+Train : 2 Block: 1 Location: 0.824204263056 Speed: 9.824848 Sprog Speed: 0.3
+Elapsed update time: 1.656992
+Updating train as changing speed
+ABOVE FINAL
+Remaining lag time: 0
+Last update time: 2017-04-19 15:35:50.560578
+Remaining change time: 0
+Train : 5 Block: 13 Location: 11.5259172401 Speed: 13.674 Sprog Speed: 1.0
+Checking for collision cases
+Making a decision on the valid values of future trains
+Block: 2, Previous Block: 1
+Block: 8, Previous Block: 1
+[(Turnout: 5, 12.050795736944004, True)]
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 5, Previous Block: 6
+Block: 13, Previous Block: 7
+Block: 12, Previous Block: 13
+Block: 15, Previous Block: 12
+Block: 14, Previous Block: 15
+Block: 11, Previous Block: 12
+Block: 10, Previous Block: 11
+[(Turnout: 4, 5.4492042630559965, True), (Train: 5, 11.73578702292572, True), (Turnout: 2, 28.761704263055996, True)]
+Checking same direction counter-clockwise
+Front: False Back: True
+Case: train is catching up and cannot swtich turnout in time
+-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------
+Other train slowing down?
+Speed steps: [0, 0.3333, 2.746, 5.811, 8.405, 10.21, 11.247, 12.123, 12.845, 13.311, 13.674]
+Current train sprog speed: 1.0
+New max speed we need: 9.824848
+Current testing sprog speed: 0.8
+New approximate speed: 12.845
+Current testing sprog speed: 0.6
+New approximate speed: 11.247
+Current testing sprog speed: 0.4
+New approximate speed: 8.405
+Calculated change in sprog speed: -0.6
+---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------
+Changing the speed of 5 to 0.4 from 1.0
+Elapsed update time: 0.118679
+Updating train as normal
+SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------
+New sprog speed: 0.4
+0.4
+0
+4.0
+4
+Calculated new speed: 8.405
+Speed diff: 5.269
+currentTime for light change: 2017-04-19 15:35:50.680277
+total seconds from last light change: 4.984845
+------------------------------------------------------Light is already Yellow!
+Calculated fix time: 2.258625
+
+Activated: 2
+Elapsed update time: 0.13432
+Updating train as changing speed
+ABOVE FINAL
+Remaining lag time: 0
+Last update time: 2017-04-19 15:35:50.694277
+Remaining change time: 0
+Train : 2 Block: 1 Location: 2.076056898 Speed: 9.014 Sprog Speed: 0.3
+Elapsed update time: 0.015979
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.015979
+Remaining lag time: 1.484021
+Last update time: 2017-04-19 15:35:50.695236
+Remaining change time: 0.658625
+Train : 5 Block: 13 Location: 13.3672307321 Speed: 13.674 Sprog Speed: 0.4
+Block: 1, Previous Block: 7
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 13, Previous Block: 7
+[(Train: 2, 2.0760568979999965, True)]
+Checking train: 2
+Inside first check
+Train block: 1 Breaker Block: 1
+Distance: 2.076056898
+Updating Train!
+Pair Distance: 22.4375
+Time: 1.79048
+ 
+('The same train activated the beam break! ID: ', 2)
+Elapsed update time: 1.688534
+Updating train as normal
+Train : 2 Block: 8 Location: 2.345445476 Speed: 9.014 Sprog Speed: 0.3
+Elapsed update time: 1.687284
+Updating train as changing speed
+ABOVE LAG TIME BELOW FINAL
+Old speed: 13.674
+New derived speed: 12.047896
+Remaining lag time: 0
+Last update time: 2017-04-19 15:35:52.382520
+Remaining change time: 0.455362
+Train : 5 Block: 8 Location: 0.961388759454 Speed: 12.047896 Sprog Speed: 0.4
+Elapsed update time: 1.001734
+Updating train as normal
+Train : 2 Block: 8 Location: 11.375075752 Speed: 9.014 Sprog Speed: 0.3
+Elapsed update time: 1.001712
+Updating train as changing speed
+ABOVE FINAL
+Remaining lag time: 0
+Last update time: 2017-04-19 15:35:53.384232
+Remaining change time: 0
+Train : 5 Block: 8 Location: 10.2101963236 Speed: 8.405 Sprog Speed: 0.4
+Checking for collision cases
+Block: 9, Previous Block: 8
+Block: 10, Previous Block: 9
+[(Turnout: 3, 32.624924248, True)]
+Block: 1, Previous Block: 8
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 13, Previous Block: 7
+[(Train: 5, 1.1648794283697175, True), (Turnout: 5, 11.375075751999997, True), (Turnout: 4, 28.875075751999997, True)]
+Checking same direction counter-clockwise
+Front: False Back: True
+currentTime for light change: 2017-04-19 15:35:53.385316
+total seconds from last light change: 7.689884
+Setting light to -------------------------------------------------------------- green to help clear weird bug
+^C Ending program
+Exiting cleanly
+Exiting cleanly
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Activated: 6
+Elapsed update time: 0.228843
+Updating train as normal
+Train : 2 Block: 4 Location: 6.23925908124 Speed: 9.08190993509 Sprog Speed: 0.3
+Elapsed update time: 0.229169
+Updating train as normal
+Train : 5 Block: 9 Location: 2.33518946574 Speed: 10.1898139178 Sprog Speed: 0.4
+Checking for collision cases
+Block: 5, Previous Block: 4
+Block: 6, Previous Block: 5
+[]
+Block: 3, Previous Block: 4
+Block: 2, Previous Block: 3
+[(Turnout: 1, 6.239259081236828, True)]
+Checking same direction counter-clockwise
+Front: False Back: False
+currentTime for light change: 2017-04-19 16:07:21.668940
+total seconds from last light change: 0.222186
+------------------------------------------------------Light is already green!
+Block: 5, Previous Block: 4
+Block: 4, Previous Block: 5
+[(Train: 2, 0.0732409187631724, True)]
+Checking train: 2
+Inside first check
+Train block: 4 Breaker Block: 5
+Distance: 0.0732409187632
+Updating Train!
+Pair Distance: 33.8125
+Time: 3.71484
+Speed: 9.04525803443
+ 
+Elapsed update time: 1.002551
+Updating train as normal
+Train : 2 Block: 5 Location: 9.06833248767 Speed: 9.04525803443 Sprog Speed: 0.3
+Elapsed update time: 1.002517
+Updating train as normal
+Train : 5 Block: 10 Location: 7.42565114521 Speed: 10.1898139178 Sprog Speed: 0.4
+Checking for collision cases
+Block: 6, Previous Block: 5
+Block: 7, Previous Block: 6
+[(Turnout: 4, 36.494167512327536, True)]
+Block: 4, Previous Block: 5
+Block: 3, Previous Block: 4
+[(Turnout: 1, 15.380832487672464, True)]
+Checking same direction counter-clockwise
+Front: False Back: False
+Checking for possible turnout collision
+Block: 6, Previous Block: 7
+Block: 5, Previous Block: 6
+Block: 4, Previous Block: 5
+Block: 13, Previous Block: 7
+Block: 12, Previous Block: 13
+Block: 15, Previous Block: 12
+Block: 14, Previous Block: 15
+Block: 3, Previous Block: 14
+Block: 11, Previous Block: 12
+Block: 10, Previous Block: 11
+Block: 9, Previous Block: 10
+Block: 8, Previous Block: 9
+Block: 17, Previous Block: 10
+Block: 16, Previous Block: 17
+Array Straight for turnout: [(Train: 2, 36.494167512327536, True)]
+Array Turn for turnout: [(Train: 5, 33.82434885478869, True)]
+Inside of check for turnout collision
+Case: Train collision possible at a turnout
+-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------
+Train 2 speeding up?
+Speed steps: [0, 0.3333, 2.746, 5.811, 8.405, 10.21, 11.247, 12.123, 12.845, 13.311, 13.674]
+Current train sprog speed: 0.4
+Current testing sprog speed: 0.6
+New approximate speed: 11.247
+Current testing sprog speed: 0.8
+New approximate speed: 12.845
+Current testing sprog speed: 1.0
+New approximate speed: 13.674
+Calculated change in sprog speed: 0.6
+---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------
+Changing the speed of 5 to 1.0 from 0.4
+Elapsed update time: 0.091788
+Updating train as normal
+SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------
+New sprog speed: 1.0
+1.0
+1
+10.0
+10
+Calculated new speed: 13.674
+Speed diff: 3.48418608216
+currentTime for light change: 2017-04-19 16:07:22.763055
+total seconds from last light change: 1.316301
+Setting light to -------------------------------------------------------------- yellow
+Calculated fix time: 2.03552326027
+
+Activated: 4
+Elapsed update time: 0.373263
+Updating train as normal
+Train : 2 Block: 5 Location: 12.4445926374 Speed: 9.04525803443 Sprog Speed: 0.3
+Elapsed update time: 0.281346
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.281346
+Remaining lag time: 1.218654
+Last update time: 2017-04-19 16:07:23.044032
+Remaining change time: 0.43552326027
+Train : 5 Block: 11 Location: 0.665317171631 Speed: 10.1898139178 Sprog Speed: 1.0
+Block: 11, Previous Block: 10
+Block: 10, Previous Block: 11
+[(Train: 5, 0.6653171716314219, True)]
+Checking train: 5
+Inside first check
+Train block: 11 Breaker Block: 11
+Distance: 0.665317171631
+Updating Train!
+Pair Distance: 15.6875
+Time: 1.604568
+ 
+Elapsed update time: 1.001883
+Updating train as normal
+Train : 2 Block: 5 Location: 21.5068828927 Speed: 9.04525803443 Sprog Speed: 0.3
+Elapsed update time: 1.002222
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 1.002222
+Remaining lag time: 0.216432
+Last update time: 2017-04-19 16:07:24.046002
+Remaining change time: 0.43552326027
+Train : 5 Block: 12 Location: 2.83745568437 Speed: 10.1898139178 Sprog Speed: 1.0
+
+Activated: 3
+Elapsed update time: 0.042984
+Updating train as normal
+Train : 2 Block: 5 Location: 21.895684264 Speed: 9.04525803443 Sprog Speed: 0.3
+Elapsed update time: 0.043037
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.043037
+Remaining lag time: 0.173395
+Last update time: 2017-04-19 16:07:24.089039
+Remaining change time: 0.43552326027
+Train : 5 Block: 12 Location: 3.27599470595 Speed: 10.1898139178 Sprog Speed: 1.0
+Block: 6, Previous Block: 5
+Block: 5, Previous Block: 6
+[(Train: 2, 1.2293157359660825, True)]
+Checking train: 2
+Inside first check
+Train block: 5 Breaker Block: 6
+Distance: 1.22931573597
+Updating Train!
+Pair Distance: 23.125
+Time: 2.420406
+Speed: 9.09309041844
+ 
+
+Activated: 1
+Elapsed update time: 0.167969
+Updating train as normal
+Train : 2 Block: 6 Location: 1.5273573045 Speed: 9.09309041844 Sprog Speed: 0.3
+Elapsed update time: 0.167551
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.167551
+Remaining lag time: 0.005844
+Last update time: 2017-04-19 16:07:24.256590
+Remaining change time: 0.43552326027
+Train : 5 Block: 12 Location: 4.9833082177 Speed: 10.1898139178 Sprog Speed: 1.0
+Block: 13, Previous Block: 12
+Block: 12, Previous Block: 13
+Block: 15, Previous Block: 12
+Block: 11, Previous Block: 12
+[(Train: 5, 0.5166917823018764, True)]
+Checking train: 5
+Inside first check
+Train block: 12 Breaker Block: 13
+Distance: 0.516691782302
+Updating Train!
+Pair Distance: 12.875
+Time: 1.212547
+ 
+Elapsed update time: 1.002052
+Updating train as normal
+Train : 2 Block: 6 Location: 10.6391067445 Speed: 9.09309041844 Sprog Speed: 0.3
+Elapsed update time: 1.002517
+Updating train as changing speed
+ABOVE FINAL
+Remaining lag time: 0
+Last update time: 2017-04-19 16:07:25.258844
+Remaining change time: 0
+Train : 5 Block: 13 Location: 12.9293338336 Speed: 13.674 Sprog Speed: 1.0
+Checking for collision cases
+Block: 7, Previous Block: 6
+Block: 1, Previous Block: 7
+Block: 2, Previous Block: 1
+Block: 8, Previous Block: 1
+[(Turnout: 4, 11.79839325552086, True), (Turnout: 5, 29.29839325552086, True)]
+Block: 5, Previous Block: 6
+Block: 4, Previous Block: 5
+[]
+Checking same direction counter-clockwise
+Front: False Back: False
+Checking for possible turnout collision
+Block: 6, Previous Block: 7
+Block: 5, Previous Block: 6
+Block: 4, Previous Block: 5
+Block: 13, Previous Block: 7
+Block: 12, Previous Block: 13
+Block: 15, Previous Block: 12
+Block: 14, Previous Block: 15
+Block: 3, Previous Block: 14
+Block: 11, Previous Block: 12
+Block: 10, Previous Block: 11
+Block: 9, Previous Block: 10
+Block: 8, Previous Block: 9
+Block: 17, Previous Block: 10
+Block: 16, Previous Block: 17
+Array Straight for turnout: [(Train: 2, 11.79839325552086, True)]
+Array Turn for turnout: [(Train: 5, 4.883166166408039, True)]
+Inside of check for turnout collision
+Case: Train collision possible at a turnout
+--------------------------------------------------------------CASE 3 SLOW 2 SPEED 1!----------------------
+Changing the speed of 2 to 0.9 from 0.3
+Elapsed update time: 0.124446
+Updating train as normal
+SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------
+New sprog speed: 0.9
+0.9
+0
+9.0
+9
+Calculated new speed: 15.084
+Speed diff: 5.99090958156
+currentTime for light change: 2017-04-19 16:07:25.383317
+total seconds from last light change: 2.615792
+------------------------------------------------------Light is already Yellow!
+Calculated fix time: 2.34886369769
+Changing the speed of 5 to 0.4 from 1.0
+Elapsed update time: 0.222418
+Updating train as normal
+SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------
+New sprog speed: 0.4
+0.4
+0
+4.0
+4
+Calculated new speed: 8.405
+Speed diff: 5.269
+currentTime for light change: 2017-04-19 16:07:25.481568
+total seconds from last light change: 2.714043
+------------------------------------------------------Light is already Yellow!
+Calculated fix time: 2.258625
+
+Activated: 2
+Elapsed update time: 0.565014
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.565014
+Remaining lag time: 0.934986
+Last update time: 2017-04-19 16:07:25.947993
+Remaining change time: 0.748863697694
+Train : 2 Block: 6 Location: 16.9084288644 Speed: 9.09309041844 Sprog Speed: 0.9
+Elapsed update time: 0.466913
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.466913
+Remaining lag time: 1.033087
+Last update time: 2017-04-19 16:07:25.948175
+Remaining change time: 0.658625
+Train : 5 Block: 7 Location: 4.54274592759 Speed: 13.674 Sprog Speed: 0.4
+Block: 1, Previous Block: 7
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 13, Previous Block: 7
+[(Train: 5, 0.08225407240803762, True)]
+Checking train: 5
+Inside first check
+Train block: 7 Breaker Block: 1
+Distance: 0.082254072408
+Updating Train!
+Pair Distance: 22.4375
+Time: 1.691535
+ 
+Elapsed update time: 1.001987
+Updating train as changing speed
+ABOVE LAG TIME BELOW FINAL
+Old speed: 9.09309041844
+New derived speed: 9.62909841844
+Remaining lag time: 0
+Last update time: 2017-04-19 16:07:26.949980
+Remaining change time: 0.681862697694
+Train : 2 Block: 7 Location: 3.60004378949 Speed: 9.62909841844 Sprog Speed: 0.9
+Elapsed update time: 1.002445
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 1.002445
+Remaining lag time: 0.030642
+Last update time: 2017-04-19 16:07:26.950307
+Remaining change time: 0.658625
+Train : 5 Block: 8 Location: 0.83243293 Speed: 13.674 Sprog Speed: 0.4
+
+Activated: 2
+Elapsed update time: 0.022147
+Updating train as changing speed
+ABOVE LAG TIME BELOW FINAL
+Old speed: 9.62909841844
+New derived speed: 9.80627441844
+Remaining lag time: 0
+Last update time: 2017-04-19 16:07:26.972127
+Remaining change time: 0.659715697694
+Train : 2 Block: 7 Location: 3.8152613906 Speed: 9.80627441844 Sprog Speed: 0.9
+Elapsed update time: 0.022043
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.022043
+Remaining lag time: 0.008599
+Last update time: 2017-04-19 16:07:26.972350
+Remaining change time: 0.658625
+Train : 5 Block: 8 Location: 1.133848912 Speed: 13.674 Sprog Speed: 0.4
+Block: 1, Previous Block: 7
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 13, Previous Block: 7
+[(Train: 2, 0.809738609400454, True)]
+Checking train: 2
+Inside first check
+Train block: 7 Breaker Block: 1
+Distance: 0.8097386094
+Updating Train!
+Pair Distance: 27.0625
+Time: 2.883483
+ 
+Elapsed update time: 1.002139
+Updating train as changing speed
+ABOVE FINAL
+Remaining lag time: 0
+Last update time: 2017-04-19 16:07:27.974134
+Remaining change time: 0
+Train : 2 Block: 8 Location: 0.500365468862 Speed: 15.084 Sprog Speed: 0.9
+Elapsed update time: 1.002177
+Updating train as changing speed
+ABOVE FINAL
+Remaining lag time: 0
+Last update time: 2017-04-19 16:07:27.974527
+Remaining change time: 0
+Train : 5 Block: 8 Location: 11.3376022905 Speed: 8.405 Sprog Speed: 0.4
+Checking for collision cases
+Block: 9, Previous Block: 8
+[(Train: 5, 10.837236821637676, True)]
+Block: 1, Previous Block: 8
+Block: 7, Previous Block: 1
+Block: 6, Previous Block: 7
+Block: 13, Previous Block: 7
+Block: 12, Previous Block: 13
+[(Turnout: 5, 0.5003654688623236, True), (Turnout: 4, 18.000365468862324, True)]
+Checking same direction counter-clockwise
+Front: True Back: False
+Case: train is catching up and cannot swtich turnout in time
+-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------
+Check train slowing down?
+Speed steps: [0, 0.5555, 5.555, 9.014, 11.237, 12.677, 13.602, 14.316, 14.593, 15.084, 15.169]
+Current train sprog speed: 0.9
+New max speed we need: 8.405
+Current testing sprog speed: 0.7
+New approximate speed: 14.316
+Current testing sprog speed: 0.5
+New approximate speed: 12.677
+Current testing sprog speed: 0.3
+New approximate speed: 9.014
+Calculated change in sprog speed: -0.6
+---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------
+Changing the speed of 2 to 0.3 from 0.9
+Elapsed update time: 0.091393
+Updating train as normal
+SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------
+New sprog speed: 0.3
+0.3
+0
+3.0
+3
+Calculated new speed: 9.014
+Speed diff: 6.07
+currentTime for light change: 2017-04-19 16:07:28.065910
+total seconds from last light change: 5.298385
+------------------------------------------------------Light is already Yellow!
+Calculated fix time: 2.35875
+-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------
+Other Train speeding up?
+Speed steps: [0, 0.3333, 2.746, 5.811, 8.405, 10.21, 11.247, 12.123, 12.845, 13.311, 13.674]
+Current train sprog speed: 0.4
+Current testing sprog speed: 0.6
+New approximate speed: 11.247
+Current testing sprog speed: 0.8
+New approximate speed: 12.845
+Current testing sprog speed: 1.0
+New approximate speed: 13.674
+Calculated change in sprog speed: 0.6
+---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------
+Changing the speed of 5 to 0.6 from 0.4
+Elapsed update time: 0.203853
+Updating train as normal
+SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------
+New sprog speed: 0.6
+0.6
+0
+6.0
+6
+Calculated new speed: 11.247
+Speed diff: 2.842
+currentTime for light change: 2017-04-19 16:07:28.178734
+total seconds from last light change: 5.411209
+------------------------------------------------------Light is already Yellow!
+Calculated fix time: 1.95525
+Elapsed update time: 1.114602
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 1.114602
+Remaining lag time: 0.385398
+Last update time: 2017-04-19 16:07:29.180129
+Remaining change time: 0.75875
+Train : 2 Block: 8 Location: 18.6915940489 Speed: 15.084 Sprog Speed: 0.3
+Elapsed update time: 1.002076
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 1.002076
+Remaining lag time: 0.497924
+Last update time: 2017-04-19 16:07:29.180456
+Remaining change time: 0.35525
+Train : 5 Block: 8 Location: 21.4734355355 Speed: 8.405 Sprog Speed: 0.6
+Elapsed update time: 1.001712
+Updating train as changing speed
+ABOVE LAG TIME BELOW FINAL
+Old speed: 15.084
+New derived speed: 10.153488
+Remaining lag time: 0
+Last update time: 2017-04-19 16:07:30.181841
+Remaining change time: 0.142436
+Train : 2 Block: 8 Location: 32.2820460705 Speed: 10.153488 Sprog Speed: 0.3
+Elapsed update time: 1.001901
+Updating train as changing speed
+ABOVE FINAL
+Remaining lag time: 0
+Last update time: 2017-04-19 16:07:30.182357
+Remaining change time: 0
+Train : 5 Block: 8 Location: 30.8219058245 Speed: 11.247 Sprog Speed: 0.6
+Checking for collision cases
+Block: 9, Previous Block: 8
+Block: 10, Previous Block: 9
+Block: 11, Previous Block: 10
+Block: 12, Previous Block: 11
+Block: 13, Previous Block: 12
+[(Turnout: 3, 11.717953929521684, True), (Turnout: 2, 29.655453929521684, True)]
+Block: 1, Previous Block: 8
+[(Train: 5, 1.4601402459783195, True), (Turnout: 5, 32.282046070478316, True)]
+Checking same direction counter-clockwise
+Front: False Back: True
+Case: train is catching up and cannot swtich turnout in time
+-------------------------------------------------------------TESTING NEW SPROG SPEED----------------------
+Other train slowing down?
+Speed steps: [0, 0.3333, 2.746, 5.811, 8.405, 10.21, 11.247, 12.123, 12.845, 13.311, 13.674]
+Current train sprog speed: 0.6
+New max speed we need: 10.153488
+Current testing sprog speed: 0.4
+New approximate speed: 8.405
+Calculated change in sprog speed: -0.2
+---------------------------------------------------------END TESTING NEW SPROG SPEED----------------------
+Changing the speed of 5 to 0.4 from 0.6
+Elapsed update time: 0.113477
+Updating train as normal
+SETTING SPROG SPEED --------------------------------------------------------------------SPEED------------------
+New sprog speed: 0.4
+0.4
+0
+4.0
+4
+Calculated new speed: 8.405
+Speed diff: 2.842
+currentTime for light change: 2017-04-19 16:07:30.296264
+total seconds from last light change: 7.528739
+------------------------------------------------------Light is already Yellow!
+Calculated fix time: 1.95525
+
+Activated: 8
+Elapsed update time: 0.205961
+Updating train as changing speed
+ABOVE FINAL
+Remaining lag time: 0
+Last update time: 2017-04-19 16:07:30.387802
+Remaining change time: 0
+Train : 2 Block: 8 Location: 34.2197305809 Speed: 9.014 Sprog Speed: 0.3
+Elapsed update time: 0.092227
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 0.092227
+Remaining lag time: 1.407773
+Last update time: 2017-04-19 16:07:30.388061
+Remaining change time: 0.35525
+Train : 5 Block: 8 Location: 33.1354587125 Speed: 11.247 Sprog Speed: 0.4
+Block: 9, Previous Block: 8
+Block: 10, Previous Block: 9
+Block: 8, Previous Block: 9
+[(Train: 2, 4.6552694191376816, True), (Train: 5, 5.739541287500003, True)]
+Checking train: 2
+Inside first check
+Train block: 8 Breaker Block: 9
+Distance: 4.65526941914
+Updating Train!
+Pair Distance: 51.75
+Time: 3.41568
+ 
+('The same train activated the beam break! ID: ', 8)
+
+Activated: 4
+Elapsed update time: 1.363363
+Updating train as normal
+Train : 2 Block: 10 Location: 7.164354082 Speed: 9.014 Sprog Speed: 0.3
+Elapsed update time: 1.363092
+Updating train as changing speed
+IN LAG TIME
+Elapsed time: 1.363092
+Remaining lag time: 0.044681
+Last update time: 2017-04-19 16:07:31.751153
+Remaining change time: 0.35525
+Train : 5 Block: 10 Location: 4.4661544365 Speed: 11.247 Sprog Speed: 0.4
+Block: 11, Previous Block: 10
+Block: 10, Previous Block: 11
+[(Train: 2, 3.398145917999999, True)]
+Checking train: 2
+Inside first check
+Train block: 10 Breaker Block: 11
+Distance: 3.398145918
+Updating Train!
+Pair Distance: 15.6875
+Time: 1.363231
+Speed: 10.2607937444
+ 
+^C Ending program
+Exiting cleanly
+^CExiting cleanly
