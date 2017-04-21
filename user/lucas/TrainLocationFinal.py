@@ -57,7 +57,7 @@ class TrainLayout:
         self.COLLISION_TIME_BUFFER = 5 # when a train is catching up, if they'll collide in less than this time, speed up/slow down a train 
         self.TRAIN_DISTANCE_BUFFER = 15 # Similar to COLLISION_TIME_BUFFER, if trains are within this distance, speed up/slow down 
         self.TURNOUT_COLLISION_TIME_BUFFER = 1.5 # both trains are reaching turnout at same time, if it takes them this amount of time or lower, take action
-        self.TRAIN_COLLISION_DIST_CHECK = 40 # distance to check in front and in back of the checkTrain for various objects
+        self.TRAIN_COLLISION_DIST_CHECK = 45 # distance to check in front and in back of the checkTrain for various objects
         self.TURNOUT_COLLISION_DIST_CHECK = 50 # distance to check in the paths of a turnout for trains/other turnouts
         self.FIX_TIME_BUFFER = 0.1 # Buffer for fix time remaining, so no extra actions are taken within at least this time window
         self.MIN_SPEED = 0.3 + 0.15 # increase by 0.15 to prevent problems with rounding error
@@ -85,13 +85,13 @@ class TrainLayout:
             train1 = Train(2,train1_start_segment)
             train1.sprog_speed = train1_start_speed
             if self.debug: print("Setting Train " + str(train1.train_id) + " to have SPROG speed: " + str(train1.sprog_speed))
-            os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(train1.train_id) + " " + str(train1.sprog_speed))
+            os.system("python changeSpeedOfficial.py " + str(train1.train_id) + " " + str(train1.sprog_speed))
             self.trains.append(train1)
         if(train2_start_segment != 0):
             train2 = Train(5,train2_start_segment)
             train2.sprog_speed = train2_start_speed
             if self.debug: print("Setting Train " + str(train2.train_id) + " to have SPROG speed: " + str(train2.sprog_speed))
-            os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(train2.train_id) + " " + str(train2.sprog_speed))
+            os.system("python changeSpeedOfficial.py " + str(train2.train_id) + " " + str(train2.sprog_speed))
             self.trains.append(train2)
         if(len(self.trains) == 0):
             print("There are no trains to keep track of!")
@@ -199,7 +199,7 @@ class TrainLayout:
 
         # Create the GE light handler and turn track power on
         self.light = lightHandler.lightHandler(self.debug)
-        os.system("sudo python /home/pi/teamge/user/Matt/turnTrackOnOfficial.py")
+        os.system("sudo python turnTrackOnOfficial.py")
 
         
     # Method to take in a beam breaker id, and then search through the list of beam breakers
@@ -235,7 +235,10 @@ class TrainLayout:
         randomNumber = random.randint(0,X)
         if self.debug: print("Random number: " + str(randomNumber))
         if(randomNumber == X):
-            turnout_to_switch = random.randint(1,5)
+            # For now, only have the possibility of turnouts 1 and 5 randomly switching as those are the only turnouts affecting counter-clockwise movement
+            turnout_to_switch = random.randint(1,2)
+            if(turnout_to_switch == 2):
+                turnout_to_switch = 5
             for turnout in self.turnouts:
                 if(turnout_to_switch == turnout.turnout_id):
                     self.switchTurnout(turnout,0)
@@ -910,7 +913,7 @@ class TrainLayout:
     # Only update fix time if update_fix_time is True
     def changeTrainSpeed(self, train, sprog_speed_change, update_fix_time):
         new_speed = train.sprog_speed + sprog_speed_change
-        os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(train.train_id) + " " + str(new_speed))
+        os.system("python changeSpeedOfficial.py " + str(train.train_id) + " " + str(new_speed))
         if self.debug: print("Changing the speed of " + str(train.train_id) + " to " + str(new_speed) + " from " + str(train.sprog_speed))
         train.updateTrain(datetime.datetime.utcnow())
         change_time = train.setNewSPROGSpeed(new_speed)
@@ -1477,7 +1480,7 @@ class Turnout:
     def __activateRelay(self, pin_num):
         #Activate the pin for the duration of the time delay, then shut off
         if self.debug: print("ACTIVATING TURNOUT --------------------------------------------------------------------TURNOUT " + str(self.turnout_id) + "--------------")
-        os.system("sudo python /home/pi/teamge/user/Matt/activatePin.py " + str(pin_num))
+        os.system("sudo python activatePin.py " + str(pin_num))
     
     # set the block and distance in block for the turnout
     def setBlock(self, block, dist_in_block):
@@ -1518,6 +1521,6 @@ while True:
     except KeyboardInterrupt:
         print(" Ending program")
         # Turn off track power, shut off light, end the program
-        os.system("python /home/pi/teamge/user/Matt/turnTrackOffOfficial.py")
-        os.system("sudo python /home/pi/teamge/user/Matt/lightOff.py")
+        os.system("python turnTrackOffOfficial.py")
+        os.system("sudo python lightOff.py")
         sys.exit()

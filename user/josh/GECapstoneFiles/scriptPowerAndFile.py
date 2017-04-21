@@ -27,7 +27,7 @@ class Train(object):
         self.isForward = isForward
 
 # Class to handle the trains
-class TrainHandler(jmri.jmrit.automat.AbstractAutomaton) :
+class TrainHandler(jmri.jmrit.automat.AbstractAutomaton):
 
         def init(self):
                 # init() is called exactly once at the beginning to do
@@ -43,7 +43,7 @@ class TrainHandler(jmri.jmrit.automat.AbstractAutomaton) :
                 # Every row after has the format ID,SPROG_SPEED,True/False for id, speed (0.0-1.0), and boolean for direction
                 print "reading from file"
                 try:
-                    f = open('/home/pi/teamge/user/josh/trainProperties.txt')
+                    f = open('/home/pi/teamge/user/josh/GECapstoneFiles/trainProperties.txt')
                     try:
                         reader = csv.reader(f)
                         firstRow = True
@@ -97,7 +97,7 @@ class TrainHandler(jmri.jmrit.automat.AbstractAutomaton) :
                 # Wait half a second, and then check file again to see if values have updated
                 self.waitMsec(250)
                 try:
-                    f = open('/home/pi/teamge/user/josh/trainProperties.txt')
+                    f = open('/home/pi/teamge/user/josh/GECapstoneFiles/trainProperties.txt')
                     try:
                         reader = csv.reader(f)
                         firstRow = True

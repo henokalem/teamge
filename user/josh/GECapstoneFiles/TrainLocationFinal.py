@@ -8,6 +8,8 @@ import csv
 import sys
 import lightHandler
 import random
+import json
+import paho.mqtt.client as mqtt
 
 #Class for beam breakers
 class BeamBreaker:
@@ -57,7 +59,7 @@ class TrainLayout:
         self.COLLISION_TIME_BUFFER = 5 # when a train is catching up, if they'll collide in less than this time, speed up/slow down a train 
         self.TRAIN_DISTANCE_BUFFER = 15 # Similar to COLLISION_TIME_BUFFER, if trains are within this distance, speed up/slow down 
         self.TURNOUT_COLLISION_TIME_BUFFER = 1.5 # both trains are reaching turnout at same time, if it takes them this amount of time or lower, take action
-        self.TRAIN_COLLISION_DIST_CHECK = 40 # distance to check in front and in back of the checkTrain for various objects
+        self.TRAIN_COLLISION_DIST_CHECK = 45 # distance to check in front and in back of the checkTrain for various objects
         self.TURNOUT_COLLISION_DIST_CHECK = 50 # distance to check in the paths of a turnout for trains/other turnouts
         self.FIX_TIME_BUFFER = 0.1 # Buffer for fix time remaining, so no extra actions are taken within at least this time window
         self.MIN_SPEED = 0.3 + 0.15 # increase by 0.15 to prevent problems with rounding error
@@ -76,7 +78,13 @@ class TrainLayout:
         self.fix_time_remaining = 0 # time till next acceptable action
         self.time_of_last_check = datetime.datetime.utcnow() # Time since possible collisions were checked for
         self.time_of_last_turnout_activation = datetime.datetime.utcnow()
+        self.collision_averted = True
         self.debug = True # DEBUGGING! :D Set to true to get a lot more print statements
+
+        self.mqtt_connection = mqtt.Client()
+        self.mqtt_connection.connect("127.0.0.1", 1883, 120)
+        self.mqtt_connection.loop_start()
+        if self.debug: print("connected successfully")
 
 
         # Initialize turnouts, blocks, trains, and breakers here
@@ -85,13 +93,13 @@ class TrainLayout:
             train1 = Train(2,train1_start_segment)
             train1.sprog_speed = train1_start_speed
             if self.debug: print("Setting Train " + str(train1.train_id) + " to have SPROG speed: " + str(train1.sprog_speed))
-            os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(train1.train_id) + " " + str(train1.sprog_speed))
+            os.system("python changeSpeedOfficial.py " + str(train1.train_id) + " " + str(train1.sprog_speed))
             self.trains.append(train1)
         if(train2_start_segment != 0):
             train2 = Train(5,train2_start_segment)
             train2.sprog_speed = train2_start_speed
             if self.debug: print("Setting Train " + str(train2.train_id) + " to have SPROG speed: " + str(train2.sprog_speed))
-            os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(train2.train_id) + " " + str(train2.sprog_speed))
+            os.system("python changeSpeedOfficial.py " + str(train2.train_id) + " " + str(train2.sprog_speed))
             self.trains.append(train2)
         if(len(self.trains) == 0):
             print("There are no trains to keep track of!")
@@ -105,7 +113,7 @@ class TrainLayout:
         # Set up the turnouts with the appropriate pins, orientation, and wanted started orientation
         self.turnouts.append(Turnout(1,20,21, "counter-clockwise","straight"))
         time.sleep(1)
-        self.turnouts.append(Turnout(2,7,5, "clockwise","straight"))
+        self.turnouts.append(Turnout(2,7,5, "clockwise","turn"))
         time.sleep(1)
         self.turnouts.append(Turnout(3,12,16, "clockwise","straight"))
         time.sleep(1)
@@ -134,8 +142,8 @@ class TrainLayout:
         self.blocks.append(Block(13,17.8125,self.blocks[12-1],None,None,self.blocks[7-1],None,None))
         self.blocks.append(Block(14,6.3125,self.blocks[3-1],None,None,None,None,None))
         self.blocks.append(Block(15,10.125,self.blocks[14-1],None,None,self.blocks[12-1],None,None))
-        self.blocks.append(Block(16,-1,None,None,None,None,None,None))
-        self.blocks.append(Block(17,-1,self.blocks[16-1],None,None,self.blocks[10-1],None,None))
+        self.blocks.append(Block(16,6.125,None,None,None,None,None,None))
+        self.blocks.append(Block(17,12.875,self.blocks[16-1],None,None,self.blocks[10-1],None,None))
         #Initialize the rest of the block connections here that could not be set up by the block creation
         self.blocks[1-1].addRightStraight(self.blocks[2-1])
         self.blocks[1-1].addRightTurn(self.blocks[8-1])
@@ -199,8 +207,39 @@ class TrainLayout:
 
         # Create the GE light handler and turn track power on
         self.light = lightHandler.lightHandler(self.debug)
-        os.system("sudo python /home/pi/teamge/user/Matt/turnTrackOnOfficial.py")
+        os.system("sudo python turnTrackOnOfficial.py")
 
+    # Method to format a JSON string for sending data to Predix
+    def formatJson(self, value, valueType, unixTime, name):
+        js = json.dumps({"timestamp" : unixTime, \
+                         "category" : "REAL", \
+                         "address" : "com.ge.dspmicro.machineadapter.modbus://127.0.0.1:1883/2/20", \
+                         "name" : name, \
+                         "quality" : "NOT_SUPPORTED (20000000) ", \
+                         "value" : value, \
+                         "datatype" : valueType})
+        # js = "{timestamp : " + str(unixTime) + ", category : REAL, address : com.ge.dspmicro.machineadapter.modbus://127.0.0.1:1883/2/20, name : " +str(name) + ", quality : NOT_SUPPORTED (20000000) , value : " + str(value) + ", datatype : " + str(valueType) + "}"
+        if self.debug: print(js)
+        return js
+
+    # Method to send the data from the train set (such as speed) over MQTT
+    def mqttUpdate(self):
+        train1speed = float(abs(self.trains[0].speed))
+        train1sprogSpeed = float(abs(self.trains[0].sprog_speed))
+        train1block = int(self.trains[0].current_block.block_id)
+        train1distInBlock = float(self.trains[0].distance_in_block)
+        train2speed = float(self.trains[1].speed)
+        train2sprogSpeed = float(self.trains[1].sprog_speed)
+        train2block = int(self.trains[1].current_block.block_id)
+        train2distInBlock = float(self.trains[1].distance_in_block)
+        unixTime = int(time.time())
+        self.mqtt_connection.publish("tojs", self.formatJson(train1speed, "FLOAT", unixTime, "train1ActualSpeed") , 2)
+        self.mqtt_connection.publish("tojs", self.formatJson(train1sprogSpeed, "FLOAT", unixTime, "train1SprogSpeed") , 2)
+        self.mqtt_connection.publish("tojs", self.formatJson(train1block * 100 + train1distInBlock, "FLOAT", unixTime, "train1Block") , 2)
+        self.mqtt_connection.publish("tojs", self.formatJson(train2speed, "FLOAT", unixTime, "train2ActualSpeed") , 2)
+        self.mqtt_connection.publish("tojs", self.formatJson(train2sprogSpeed, "FLOAT", unixTime, "train2SprogSpeed") , 2)
+        self.mqtt_connection.publish("tojs", self.formatJson(train2block * 100 + train2distInBlock, "FLOAT", unixTime, "train2Block") , 2)
+        
         
     # Method to take in a beam breaker id, and then search through the list of beam breakers
     # and call beamBroken on the beam breaker object with id matching the number passed in
@@ -224,9 +263,15 @@ class TrainLayout:
             if(self.fix_time_remaining < elapsed_since_check):
                 self.fix_time_remaining = 0
 
-            if self.trains[0].initialized != False and self.trains[1].initialized != False and self.fix_time_remaining <= 0:
-                self.randomSwitch()
-                self.checkForCollisions()
+            if self.trains[0].initialized != False and self.trains[1].initialized != False:
+                self.mqttUpdate()
+                if self.fix_time_remaining <= 0:
+                    #self.randomSwitch() # Stopped random track switching for now
+                    if (self.collision_averted == False):
+                        self.collision_averted = True
+                        unixTime = int(time.time())
+                        self.mqtt_connection.publish("tojs", self.formatJson("offTrainWarning", "STRING", unixTime, "message") , 2)
+                    self.checkForCollisions()
 
     # Method to randomly switch a track (very small chance to occur)
     def randomSwitch(self):
@@ -235,7 +280,10 @@ class TrainLayout:
         randomNumber = random.randint(0,X)
         if self.debug: print("Random number: " + str(randomNumber))
         if(randomNumber == X):
-            turnout_to_switch = random.randint(1,5)
+            # For now, only have the possibility of turnouts 1 and 5 randomly switching as those are the only turnouts affecting counter-clockwise movement
+            turnout_to_switch = random.randint(1,2)
+            if(turnout_to_switch == 2):
+                turnout_to_switch = 5
             for turnout in self.turnouts:
                 if(turnout_to_switch == turnout.turnout_id):
                     self.switchTurnout(turnout,0)
@@ -453,6 +501,8 @@ class TrainLayout:
     # Method to switch a turnout
     # also sets the light to yellow and sets the fix time remaining for the collision fix
     def switchTurnout(self, turnout, time_to_reach):
+        unixTime = int(time.time())
+        self.mqtt_connection.publish("tojs", self.formatJson("Switching turnout: " + str(turnout.turnout_id), "STRING", unixTime, "message") , 2)
         if self.debug:
             if time_to_reach != 0: print("SETTING LIGHT TO YELLOW")
         if self.debug: print("SWITCHING A TURNOUT: " + str(turnout.turnout_id))
@@ -502,7 +552,18 @@ class TrainLayout:
                         time_to_reach = dist_between_train_and_turnout/abs(otherTrain.speed)
                         #Make sure time to reach is greater than lag time to change turnout
                         if(time_to_reach > self.LAG_TIME):
-                            self.switchTurnout(distTuple[0], time_to_reach)
+                            checkTrainBlock = checkTrain.current_block.block_id
+                            otherTrainBlock = otherTrain.current_block.block_id
+                            # Check the blocks of the trains, if the following cases hold than we do not want turnout 1 going off
+                            if(distTuple[0].turnout_id == 1):
+                                if(checkTrainBlock == 8 or checkTrainBlock == 9) and (otherTrainBlock == 12 or otherTrainBlock == 13):
+                                    if self.debug: print("----------------------------------------------------------------------AVOIDING TURNOUT 1 BUG")
+                                elif(otherTrainBlock == 8 or otherTrainBlock == 9) and (checkTrainBlock == 12 or checkTrainBlock == 13):
+                                    if self.debug: print("----------------------------------------------------------------------AVOIDING TURNOUT 1 BUG")
+                                else:
+                                    self.switchTurnout(distTuple[0], time_to_reach)
+                            else:
+                                self.switchTurnout(distTuple[0], time_to_reach)
                             #found fix, ending method
                             return
                 #If here, this means there was no turnout that could be swtiched in time
@@ -586,7 +647,18 @@ class TrainLayout:
                         time_to_reach = dist_between_train_and_turnout/abs(checkTrain.speed)
                         #Make sure time to reach is greater than lag time to change turnout
                         if(time_to_reach > self.LAG_TIME):
-                            self.switchTurnout(distTuple[0], time_to_reach)
+                            checkTrainBlock = checkTrain.current_block.block_id
+                            otherTrainBlock = otherTrain.current_block.block_id
+                            # Check the blocks of the trains, if the following cases hold than we do not want turnout 1 going off
+                            if(distTuple[0].turnout_id == 1):
+                                if(checkTrainBlock == 8 or checkTrainBlock == 9) and (otherTrainBlock == 12 or otherTrainBlock == 13):
+                                    if self.debug: print("----------------------------------------------------------------------AVOIDING TURNOUT 1 BUG")
+                                elif(otherTrainBlock == 8 or otherTrainBlock == 9) and (checkTrainBlock == 12 or checkTrainBlock == 13):
+                                    if self.debug: print("----------------------------------------------------------------------AVOIDING TURNOUT 1 BUG")
+                                else:
+                                    self.switchTurnout(distTuple[0], time_to_reach)
+                            else:
+                                self.switchTurnout(distTuple[0], time_to_reach)
                             #found fix, ending method
                             return
                 #If here, this means there was no turnout that could be swtiched in time
@@ -860,8 +932,11 @@ class TrainLayout:
                         
                     
     # Method to set the fix time
-    def setFixTime(self, time):
-        self.fix_time_remaining = time
+    def setFixTime(self, fix_time):
+        self.collision_averted = False
+        unixTime = int(time.time())
+        self.mqtt_connection.publish("tojs", self.formatJson("Possible train collision detected!", "STRING", unixTime, "message") , 2)
+        self.fix_time_remaining = fix_time
         if self.debug: print("Calculated fix time: " + str(self.fix_time_remaining))
         self.time_of_last_check = datetime.datetime.utcnow()
 
@@ -910,7 +985,7 @@ class TrainLayout:
     # Only update fix time if update_fix_time is True
     def changeTrainSpeed(self, train, sprog_speed_change, update_fix_time):
         new_speed = train.sprog_speed + sprog_speed_change
-        os.system("python /home/pi/teamge/user/Matt/changeSpeedOfficial.py " + str(train.train_id) + " " + str(new_speed))
+        os.system("python changeSpeedOfficial.py " + str(train.train_id) + " " + str(new_speed))
         if self.debug: print("Changing the speed of " + str(train.train_id) + " to " + str(new_speed) + " from " + str(train.sprog_speed))
         train.updateTrain(datetime.datetime.utcnow())
         change_time = train.setNewSPROGSpeed(new_speed)
@@ -1477,7 +1552,7 @@ class Turnout:
     def __activateRelay(self, pin_num):
         #Activate the pin for the duration of the time delay, then shut off
         if self.debug: print("ACTIVATING TURNOUT --------------------------------------------------------------------TURNOUT " + str(self.turnout_id) + "--------------")
-        os.system("sudo python /home/pi/teamge/user/Matt/activatePin.py " + str(pin_num))
+        os.system("sudo python activatePin.py " + str(pin_num))
     
     # set the block and distance in block for the turnout
     def setBlock(self, block, dist_in_block):
@@ -1518,6 +1593,6 @@ while True:
     except KeyboardInterrupt:
         print(" Ending program")
         # Turn off track power, shut off light, end the program
-        os.system("python /home/pi/teamge/user/Matt/turnTrackOffOfficial.py")
-        os.system("sudo python /home/pi/teamge/user/Matt/lightOff.py")
+        os.system("python turnTrackOffOfficial.py")
+        os.system("sudo python lightOff.py")
         sys.exit()

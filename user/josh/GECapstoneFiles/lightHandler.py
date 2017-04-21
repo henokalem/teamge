@@ -13,15 +13,14 @@ WHITE = 3
 TIME_BUFFER = 1.0
 
 class lightHandler:
-    def __init__(self):
+    def __init__(self, debug):
 	#sets up the light and initializes to green
         self.color = GREEN
 	self.light = GELight.GELight()
 	self.light.setGreen()
-        #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
         self.timeOfLastUpdate = datetime.datetime.utcnow()
 	self.greenCounter = 0
-	self.debug = True	
+	self.debug = debug	
 
 #sets light to green
 #because of the weird bug that changes the light to magenta or some other random color, it forces it to refresh every 3rd call, regardless of whether or not it's green 
@@ -44,7 +43,6 @@ class lightHandler:
 	if self.color != GREEN:
 	    if(currentTime - self.timeOfLastUpdate).total_seconds() > TIME_BUFFER:
                 self.color = GREEN
-                #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
                 if self.debug: print("Setting light to -------------------------------------------------------------- green")
 		self.light.setOff()
                 self.light.setGreen()
@@ -72,7 +70,6 @@ class lightHandler:
                 if self.debug: print("Setting light to -------------------------------------------------------------- yellow")
                 self.light.setOff()
 		self.light.setYellow()
-		#os.system("sudo python /home/pi/teamge/user/Matt/setYellow.py")
                 self.timeOfLastUpdate = datetime.datetime.utcnow()
             else:
 		if self.debug: print("----------------------------------------------------------------- must wait to change light to yellow!")
@@ -96,7 +93,6 @@ class lightHandler:
                 if self.debug: print("Setting light to -------------------------------------------------------------- red")
                 self.light.setOff()
 		self.light.setRed()
-		#os.system("sudo python /home/pi/teamge/user/Matt/setRed.py")
                 self.timeOfLastUpdate = datetime.datetime.utcnow()
             else:
 		if self.debug: print("----------------------------------------------------------------- must wait to change light to red!")
@@ -116,7 +112,6 @@ class lightHandler:
 	    if(currentTime - self.timeOfLastUpdate).total_seconds() > TIME_BUFFER:
                 self.color = WHITE
                 if self.debug: print("Setting light to -------------------------------------------------------------- white")
-                #os.system("sudo python /home/pi/teamge/user/Matt/setGreen.py")
 		self.light.setOff()
                 self.light.setWhite()
 		self.timeOfLastUpdate = datetime.datetime.utcnow()
